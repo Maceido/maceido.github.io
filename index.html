@@ -271,6 +271,13 @@
       background: #15191c;
     }
 
+    .chat-embed {
+      margin-bottom: 10px;
+      border-color: rgba(255, 168, 51, 0.15);
+      background: #090b0d;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.34);
+    }
+
     .schedule-footer {
       display: flex;
       min-height: 48px;
@@ -402,6 +409,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 1;
+      transition: opacity 0.24s ease;
+    }
+
+    .artwork.is-loading {
+      opacity: 0.42;
     }
 
     .track-title {
@@ -441,7 +454,8 @@
     }
 
     .custom-player {
-      margin: 3px 22px 0;
+      margin: auto 22px 0;
+      padding-top: 28px;
     }
 
     .custom-player audio {
@@ -523,16 +537,17 @@
       transform: none;
     }
 
-    .play-button svg {
+    .player-state-icon {
       position: relative;
       z-index: 1;
-      width: 42px;
-      height: 42px;
-      fill: currentColor;
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      pointer-events: none;
     }
 
     .play-button .play-icon {
-      margin-left: 5px;
+      margin-left: 4px;
     }
 
     .play-button .pause-icon,
@@ -545,14 +560,15 @@
     }
 
     .player-status {
-      min-height: 17px;
-      margin: 1px 0 5px;
-      color: #a9caff;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-align: center;
-      text-transform: uppercase;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
 
     .volume-row {
@@ -630,13 +646,16 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
+      align-items: center;
       margin: 14px 22px 18px;
     }
 
     .platform-link {
       display: flex;
+      width: 100%;
       min-width: 0;
-      min-height: 49px;
+      min-height: 0;
+      aspect-ratio: 140.62 / 41;
       align-items: center;
       justify-content: center;
       padding: 4px 8px;
@@ -656,21 +675,34 @@
       object-fit: contain;
     }
 
+    .platform-link.apple {
+      padding: 0;
+      border-color: transparent;
+      background: transparent;
+    }
+
     .platform-link.apple img {
-      height: 34px;
+      width: 100%;
+      height: 100%;
     }
 
     .platform-link.spotify img {
-      width: 88px;
+      width: 78%;
     }
 
     .platform-link.youtube img {
-      width: 84px;
+      width: 76%;
     }
 
     .platform-link:hover {
       border-color: rgba(255, 199, 124, 0.72);
       background: #121416;
+    }
+
+    .platform-link.apple:hover {
+      border-color: transparent;
+      background: transparent;
+      filter: brightness(1.08);
     }
 
     .platform-link[aria-disabled="true"] {
@@ -910,7 +942,8 @@
       }
 
       .custom-player {
-        margin: 2px 12px 0;
+        margin: 0 12px;
+        padding-top: 22px;
       }
 
       .transport-row {
@@ -922,13 +955,9 @@
         height: 84px;
       }
 
-      .play-button svg {
-        width: 37px;
-        height: 37px;
-      }
-
-      .player-status {
-        margin-bottom: 3px;
+      .player-state-icon {
+        width: 51px;
+        height: 51px;
       }
 
       .music-platforms {
@@ -936,21 +965,8 @@
         margin: 12px 12px 14px;
       }
 
-      .platform-link {
-        min-height: 44px;
-        padding: 3px;
-      }
-
-      .platform-link.apple img {
-        height: 30px;
-      }
-
-      .platform-link.spotify img {
-        width: 80px;
-      }
-
-      .platform-link.youtube img {
-        width: 76px;
+      .platform-link:not(.apple) {
+        padding: 3px 5px;
       }
 
       .site-footer {
@@ -1069,8 +1085,8 @@
               </button>
 
               <button id="playButton" class="play-button" type="button" aria-label="Play WTinyRadio live stream" aria-pressed="false">
-                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
-                <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/></svg>
+                <img class="player-state-icon play-icon" src="./player-play-blue.png" alt="" aria-hidden="true">
+                <img class="player-state-icon pause-icon" src="./player-pause-blue.png" alt="" aria-hidden="true">
               </button>
 
               <button class="transport-button" type="button" disabled aria-label="Next track is unavailable on live radio">
@@ -1116,10 +1132,10 @@
           </div>
         </header>
 
-        <div class="embed-wrap" style="margin-bottom: 10px;">
+        <div class="embed-wrap chat-embed">
           <iframe
             src="https://app.radiocult.fm/embed/chat/mixman?theme=midnight&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true"
-            title="WTinyRadio community chat"
+            title="WTinyRadio live community chat"
             loading="eager">
           </iframe>
         </div>
@@ -1166,6 +1182,31 @@
 
     function firstValue(...values) {
       return values.find((value) => typeof value === "string" && value.trim())?.trim() || "";
+    }
+
+    function artworkValue(value) {
+      if (typeof value === "string") return value.trim();
+      if (!value || typeof value !== "object") return "";
+
+      return firstValue(
+        value["512x512"],
+        value.default,
+        value.original,
+        value["256x256"],
+        value["128x128"]
+      );
+    }
+
+    function setArtwork(source, title, artist) {
+      const nextSource = source || FALLBACK_ARTWORK;
+      const nextAlt = source ? `Artwork for ${title} by ${artist}` : "WTinyRadio artwork";
+
+      artworkElement.alt = nextAlt;
+      if (artworkElement.dataset.source === nextSource) return;
+
+      artworkElement.dataset.source = nextSource;
+      artworkElement.classList.add("is-loading");
+      artworkElement.src = nextSource;
     }
 
     function setMusicDestination(link, url) {
@@ -1220,16 +1261,16 @@
       const artist = firstValue(recognized?.artist, stationMetadata.artist, "Press play to listen");
       const artwork = firstValue(
         recognized?.artworkUrl,
-        recognized?.artwork,
-        recognized?.albumArtwork,
+        artworkValue(recognized?.artwork),
+        artworkValue(recognized?.albumArtwork),
         stationMetadata.artworkUrl,
-        stationMetadata.artwork
+        artworkValue(stationMetadata.artwork),
+        artworkValue(stationMetadata.albumArtwork)
       );
 
       titleElement.textContent = title;
       artistElement.textContent = artist;
-      artworkElement.src = artwork || FALLBACK_ARTWORK;
-      artworkElement.alt = artwork ? `Artwork for ${title} by ${artist}` : "WTinyRadio artwork";
+      setArtwork(artwork, title, artist);
 
       const spotifyTrackId = firstValue(recognized?.spotifyTrackId);
       const spotifyUrl = spotifyTrackId
@@ -1262,8 +1303,17 @@
       }
     }
 
+    artworkElement.addEventListener("load", () => {
+      artworkElement.classList.remove("is-loading");
+    });
+
     artworkElement.addEventListener("error", () => {
-      if (!artworkElement.src.endsWith("512x512.png")) artworkElement.src = FALLBACK_ARTWORK;
+      artworkElement.classList.remove("is-loading");
+      if (artworkElement.dataset.source !== FALLBACK_ARTWORK) {
+        artworkElement.dataset.source = FALLBACK_ARTWORK;
+        artworkElement.src = FALLBACK_ARTWORK;
+        artworkElement.alt = "WTinyRadio artwork";
+      }
     });
 
     playButton.addEventListener("click", togglePlayback);
