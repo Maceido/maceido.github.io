@@ -440,19 +440,190 @@
       text-transform: uppercase;
     }
 
-    .player-embed {
-      margin: 11px 22px 0;
-      overflow: hidden;
-      border: 1px solid rgba(87, 157, 255, 0.18);
-      border-radius: 13px;
-      background: #15191c;
+    .custom-player {
+      margin: 3px 22px 0;
     }
 
-    .player-embed iframe {
-      display: block;
-      width: 100%;
-      height: 150px;
+    .custom-player audio {
+      display: none;
+    }
+
+    .transport-row {
+      display: grid;
+      min-height: 103px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .transport-button {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      padding: 0;
       border: 0;
+      background: transparent;
+      color: #dddcd7;
+      place-items: center;
+    }
+
+    .transport-button svg {
+      width: 27px;
+      height: 27px;
+      fill: currentColor;
+    }
+
+    .transport-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+
+    .play-button {
+      position: relative;
+      display: grid;
+      width: 96px;
+      height: 96px;
+      padding: 0;
+      border: 3px solid #66a8ff;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(52, 100, 183, 0.6), rgba(9, 24, 55, 0.95) 62%),
+        #0c1831;
+      color: #fffdf7;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.4),
+        0 0 24px rgba(46, 116, 255, 0.78),
+        inset 0 0 24px rgba(92, 155, 255, 0.3);
+      cursor: pointer;
+      place-items: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .play-button::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      pointer-events: none;
+      border: 1px solid rgba(176, 211, 255, 0.34);
+      border-radius: 50%;
+    }
+
+    .play-button:hover {
+      border-color: #9bc8ff;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.5),
+        0 0 31px rgba(46, 116, 255, 0.92),
+        inset 0 0 26px rgba(92, 155, 255, 0.38);
+      transform: scale(1.03);
+    }
+
+    .play-button:disabled {
+      cursor: wait;
+      opacity: 0.78;
+      transform: none;
+    }
+
+    .play-button svg {
+      position: relative;
+      z-index: 1;
+      width: 42px;
+      height: 42px;
+      fill: currentColor;
+    }
+
+    .play-button .play-icon {
+      margin-left: 5px;
+    }
+
+    .play-button .pause-icon,
+    .play-button.is-playing .play-icon {
+      display: none;
+    }
+
+    .play-button.is-playing .pause-icon {
+      display: block;
+    }
+
+    .player-status {
+      min-height: 17px;
+      margin: 1px 0 5px;
+      color: #a9caff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .volume-row {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) 32px;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .volume-button,
+    .volume-high {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #e5e4df;
+      place-items: center;
+    }
+
+    .volume-button {
+      cursor: pointer;
+    }
+
+    .volume-button:hover {
+      color: var(--blue-bright);
+    }
+
+    .volume-button svg,
+    .volume-high svg {
+      width: 23px;
+      height: 23px;
+      fill: currentColor;
+    }
+
+    .volume-button .muted-icon,
+    .volume-button.is-muted .volume-icon {
+      display: none;
+    }
+
+    .volume-button.is-muted .muted-icon {
+      display: block;
+    }
+
+    .volume-control {
+      width: 100%;
+      height: 5px;
+      appearance: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue) 0 var(--volume, 80%), #666 0 100%);
+      cursor: pointer;
+    }
+
+    .volume-control::-webkit-slider-thumb {
+      width: 17px;
+      height: 17px;
+      appearance: none;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
+    }
+
+    .volume-control::-moz-range-thumb {
+      width: 17px;
+      height: 17px;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
     }
 
     .music-platforms {
@@ -511,7 +682,10 @@
     .platform-link:focus-visible,
     .contact-link:focus-visible,
     .schedule-link:focus-visible,
-    .social-link:focus-visible {
+    .social-link:focus-visible,
+    .play-button:focus-visible,
+    .volume-button:focus-visible,
+    .volume-control:focus-visible {
       outline: 3px solid #fff;
       outline-offset: 3px;
     }
@@ -735,12 +909,26 @@
         display: none;
       }
 
-      .player-embed {
-        margin: 11px 12px 0;
+      .custom-player {
+        margin: 2px 12px 0;
       }
 
-      .player-embed iframe {
-        height: 148px;
+      .transport-row {
+        min-height: 92px;
+      }
+
+      .play-button {
+        width: 84px;
+        height: 84px;
+      }
+
+      .play-button svg {
+        width: 37px;
+        height: 37px;
+      }
+
+      .player-status {
+        margin-bottom: 3px;
       }
 
       .music-platforms {
@@ -872,13 +1060,36 @@
             </div>
           </div>
 
-          <div class="player-embed">
-            <iframe
-              src="https://app.radiocult.fm/embed/player/mixman?theme=dusk&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;playerDisplay=metadata&amp;removeRcBranding=true"
-              title="WTinyRadio live player"
-              loading="eager"
-              allow="autoplay">
-            </iframe>
+          <div class="custom-player">
+            <audio id="radioAudio" preload="none" playsinline src="https://mixman.radiocult.fm/stream"></audio>
+
+            <div class="transport-row" aria-label="Live radio controls">
+              <button class="transport-button" type="button" disabled aria-label="Previous track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h2v14H5V5Zm14 0v14L9 12l10-7Z"/></svg>
+              </button>
+
+              <button id="playButton" class="play-button" type="button" aria-label="Play WTinyRadio live stream" aria-pressed="false">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/></svg>
+              </button>
+
+              <button class="transport-button" type="button" disabled aria-label="Next track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5h2v14h-2V5ZM5 5l10 7-10 7V5Z"/></svg>
+              </button>
+            </div>
+
+            <p id="playerStatus" class="player-status" role="status">Press play to listen live</p>
+
+            <div class="volume-row">
+              <button id="muteButton" class="volume-button" type="button" aria-label="Mute WTinyRadio" aria-pressed="false">
+                <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Z"/></svg>
+                <svg class="muted-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.1.7 1.4-1.4 1.8 1.8 1.8-1.8 1.4 1.4-1.8 1.8 1.8 1.8-1.4 1.4-1.8-1.8-1.8 1.8-1.4-1.4 1.8-1.8-1.8-1.8Z"/></svg>
+              </button>
+              <input id="volumeControl" class="volume-control" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="WTinyRadio volume">
+              <span class="volume-high" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Zm2.8-3a9 9 0 0 1 0 13.4l1.4 1.4a11 11 0 0 0 0-16.2l-1.4 1.4Z"/></svg>
+              </span>
+            </div>
           </div>
 
           <nav class="music-platforms" aria-label="Find the current song on a music service">
@@ -938,11 +1149,17 @@
   <script>
     const STATION_ID = "mixman";
     const FALLBACK_ARTWORK = "./512x512.png";
+    const STREAM_URL = "https://mixman.radiocult.fm/stream";
     const liveEndpoint = `https://api.radiocult.fm/api/station/${STATION_ID}/schedule/live`;
 
     const titleElement = document.getElementById("trackTitle");
     const artistElement = document.getElementById("trackArtist");
     const artworkElement = document.getElementById("albumArtwork");
+    const radioAudio = document.getElementById("radioAudio");
+    const playButton = document.getElementById("playButton");
+    const playerStatus = document.getElementById("playerStatus");
+    const muteButton = document.getElementById("muteButton");
+    const volumeControl = document.getElementById("volumeControl");
     const spotifyLink = document.getElementById("spotifyLink");
     const appleMusicLink = document.getElementById("appleMusicLink");
     const youtubeMusicLink = document.getElementById("youtubeMusicLink");
@@ -954,6 +1171,44 @@
     function setMusicDestination(link, url) {
       link.href = url || "#";
       link.setAttribute("aria-disabled", url ? "false" : "true");
+    }
+
+    function updatePlaybackState(isPlaying, statusText) {
+      playButton.classList.toggle("is-playing", isPlaying);
+      playButton.setAttribute("aria-pressed", String(isPlaying));
+      playButton.setAttribute("aria-label", isPlaying ? "Pause WTinyRadio live stream" : "Play WTinyRadio live stream");
+      if (statusText) playerStatus.textContent = statusText;
+    }
+
+    function updateVolumeDisplay() {
+      const volume = radioAudio.muted ? 0 : radioAudio.volume;
+      volumeControl.value = String(volume);
+      volumeControl.style.setProperty("--volume", `${Math.round(volume * 100)}%`);
+      muteButton.classList.toggle("is-muted", radioAudio.muted || radioAudio.volume === 0);
+      muteButton.setAttribute("aria-pressed", String(radioAudio.muted || radioAudio.volume === 0));
+      muteButton.setAttribute("aria-label", radioAudio.muted || radioAudio.volume === 0 ? "Unmute WTinyRadio" : "Mute WTinyRadio");
+    }
+
+    async function togglePlayback() {
+      if (!radioAudio.paused) {
+        radioAudio.pause();
+        updatePlaybackState(false, "Paused — press play to return live");
+        return;
+      }
+
+      playButton.disabled = true;
+      playerStatus.textContent = "Connecting to the live stream…";
+
+      try {
+        radioAudio.src = STREAM_URL;
+        radioAudio.load();
+        await radioAudio.play();
+      } catch (error) {
+        updatePlaybackState(false, "Stream temporarily unavailable");
+        console.info("Live audio could not start.", error);
+      } finally {
+        playButton.disabled = false;
+      }
     }
 
     function applyNowPlaying(result) {
@@ -1011,6 +1266,30 @@
       if (!artworkElement.src.endsWith("512x512.png")) artworkElement.src = FALLBACK_ARTWORK;
     });
 
+    playButton.addEventListener("click", togglePlayback);
+
+    radioAudio.addEventListener("playing", () => updatePlaybackState(true, "Live stream playing"));
+    radioAudio.addEventListener("waiting", () => {
+      if (!radioAudio.paused) playerStatus.textContent = "Reconnecting to the live stream…";
+    });
+    radioAudio.addEventListener("pause", () => {
+      if (!playButton.disabled) updatePlaybackState(false, "Paused — press play to return live");
+    });
+    radioAudio.addEventListener("error", () => updatePlaybackState(false, "Stream temporarily unavailable"));
+
+    muteButton.addEventListener("click", () => {
+      radioAudio.muted = !radioAudio.muted;
+      updateVolumeDisplay();
+    });
+
+    volumeControl.addEventListener("input", () => {
+      radioAudio.volume = Number(volumeControl.value);
+      radioAudio.muted = radioAudio.volume === 0;
+      updateVolumeDisplay();
+    });
+
+    radioAudio.volume = 0.8;
+    updateVolumeDisplay();
     updateNowPlaying();
     window.setInterval(updateNowPlaying, 15000);
   </script>
