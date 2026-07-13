@@ -20,24 +20,24 @@
   <link rel="preconnect" href="https://api.radiocult.fm">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 
   <style>
     :root {
       color-scheme: dark;
-      --bg: #080706;
-      --panel: rgba(12, 13, 14, 0.94);
-      --panel-soft: rgba(21, 20, 18, 0.84);
-      --line: rgba(255, 158, 48, 0.26);
-      --line-strong: rgba(255, 156, 46, 0.62);
-      --orange: #ff9c2e;
-      --orange-hot: #ff6a13;
+      --black: #070706;
+      --panel: rgba(9, 10, 10, 0.965);
+      --panel-2: #141719;
+      --orange: #ff9d27;
+      --orange-hot: #ff6211;
+      --orange-line: rgba(255, 152, 33, 0.88);
       --blue: #579dff;
-      --blue-soft: #89bdff;
-      --text: #f7f3ed;
-      --muted: #aaa49c;
-      --radius: 22px;
-      --shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
+      --blue-bright: #73b1ff;
+      --text: #f6f3ee;
+      --muted: #aaa59d;
+      --spotify: #1ed760;
+      --radius: 20px;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.54);
     }
 
     * {
@@ -45,21 +45,21 @@
     }
 
     html {
+      background: var(--black);
       scroll-behavior: smooth;
-      background: var(--bg);
     }
 
     body {
-      margin: 0;
       min-width: 320px;
       min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
       color: var(--text);
       font-family: "Montserrat", system-ui, sans-serif;
       background:
-        linear-gradient(180deg, rgba(3, 3, 3, 0.3), rgba(3, 3, 3, 0.88)),
+        linear-gradient(180deg, rgba(2, 2, 2, 0.1), rgba(2, 2, 2, 0.46) 78%, rgba(2, 2, 2, 0.94)),
         url("./background-optimized.jpg") center top / cover fixed,
-        var(--bg);
-      overflow-x: hidden;
+        var(--black);
     }
 
     body::before {
@@ -69,9 +69,9 @@
       z-index: -1;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 10%, rgba(255, 119, 22, 0.09), transparent 30%),
-        radial-gradient(circle at 50% 60%, rgba(38, 106, 218, 0.08), transparent 38%),
-        rgba(0, 0, 0, 0.2);
+        radial-gradient(circle at 4% 8%, rgba(255, 138, 22, 0.16), transparent 16%),
+        radial-gradient(circle at 96% 8%, rgba(255, 138, 22, 0.16), transparent 16%),
+        radial-gradient(circle at 50% 14%, rgba(40, 92, 185, 0.08), transparent 30%);
     }
 
     a {
@@ -79,18 +79,20 @@
     }
 
     button,
-    a {
+    a,
+    input {
+      font: inherit;
       -webkit-tap-highlight-color: transparent;
     }
 
     .skip-link {
       position: fixed;
+      top: 10px;
       left: 16px;
-      top: 12px;
       z-index: 100;
       padding: 10px 14px;
-      border-radius: 10px;
-      background: var(--text);
+      border-radius: 8px;
+      background: #fff;
       color: #111;
       font-weight: 800;
       transform: translateY(-180%);
@@ -102,177 +104,116 @@
     }
 
     .site-shell {
-      width: min(1540px, calc(100% - 32px));
+      width: min(1460px, calc(100% - 42px));
       margin: 0 auto;
-      padding: 14px 0 22px;
     }
 
     .site-header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      display: flex;
+      min-height: 104px;
       align-items: center;
-      min-height: 92px;
-      margin-bottom: 14px;
-      padding: 8px 6px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .header-kicker {
-      color: var(--muted);
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      min-width: 0;
+      gap: 15px;
       text-align: left;
     }
 
     .brand-mark {
-      width: 88px;
-      height: 72px;
+      width: 60px;
+      height: 60px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 184, 91, 0.5);
+      border-radius: 50%;
       object-fit: cover;
-      object-position: center;
-      border-radius: 12px;
-      mix-blend-mode: screen;
-      filter: drop-shadow(0 0 18px rgba(255, 127, 24, 0.25));
-    }
-
-    .brand-copy {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
+      box-shadow: 0 0 22px rgba(255, 144, 31, 0.18);
     }
 
     .brand-name {
       margin: 0;
-      font-family: "Oswald", "Arial Narrow", sans-serif;
-      font-size: clamp(1.8rem, 3vw, 2.75rem);
-      font-weight: 600;
-      letter-spacing: 0.035em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.2rem, 3.4vw, 3.25rem);
+      font-weight: 400;
+      letter-spacing: 0.02em;
       line-height: 1;
-      white-space: nowrap;
-    }
-
-    .brand-tagline {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-
-    .header-status {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .live-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 9px 13px;
-      border: 1px solid rgba(255, 112, 24, 0.55);
-      border-radius: 999px;
-      background: rgba(20, 10, 6, 0.78);
-      color: #ffd8bc;
-      box-shadow: inset 0 0 18px rgba(255, 93, 0, 0.1);
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .live-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #ff4d20;
-      box-shadow: 0 0 0 5px rgba(255, 77, 32, 0.12), 0 0 14px rgba(255, 77, 32, 0.8);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      50% {
-        opacity: 0.58;
-        transform: scale(0.82);
-      }
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
     }
 
     .studio-grid {
       display: grid;
-      grid-template-columns: minmax(270px, 0.92fr) minmax(420px, 1.24fr) minmax(290px, 1fr);
+      grid-template-columns: minmax(280px, 0.92fr) minmax(420px, 1.14fr) minmax(300px, 0.92fr);
       grid-template-areas: "schedule player chat";
-      gap: 18px;
-      align-items: stretch;
+      gap: 26px;
+      align-items: start;
+      padding: 12px 0 0;
     }
 
     .panel {
       position: relative;
       display: flex;
       min-width: 0;
-      min-height: 590px;
-      height: clamp(590px, calc(100vh - 168px), 720px);
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid var(--line);
+      border: 2px solid var(--orange-line);
       border-radius: var(--radius);
       background:
-        linear-gradient(180deg, rgba(27, 24, 21, 0.78), rgba(9, 10, 11, 0.97)),
+        linear-gradient(160deg, rgba(27, 24, 20, 0.28), transparent 33%),
         var(--panel);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      box-shadow:
+        var(--shadow),
+        0 0 8px rgba(255, 146, 26, 0.32),
+        inset 0 0 24px rgba(255, 112, 14, 0.035);
       isolation: isolate;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      border-radius: inherit;
-      background: linear-gradient(135deg, rgba(255, 162, 56, 0.08), transparent 24%, transparent 72%, rgba(87, 157, 255, 0.055));
     }
 
     .panel::after {
       content: "";
       position: absolute;
       inset: 0;
-      z-index: 4;
+      z-index: 5;
       pointer-events: none;
       border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(255, 157, 55, 0.12), inset 0 0 28px rgba(255, 112, 19, 0.025);
+      box-shadow: inset 0 0 0 1px rgba(255, 206, 137, 0.09);
     }
 
     .schedule-panel {
       grid-area: schedule;
-    }
-
-    .player-panel {
-      grid-area: player;
-      border-color: rgba(255, 165, 68, 0.48);
-      box-shadow: var(--shadow), 0 0 28px rgba(255, 113, 14, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      height: 706px;
     }
 
     .chat-panel {
       grid-area: chat;
-      border-color: rgba(87, 157, 255, 0.28);
+      height: 706px;
+    }
+
+    .player-column {
+      grid-area: player;
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+    }
+
+    .player-panel {
+      height: 706px;
+      border-color: rgba(255, 207, 144, 0.85);
+      box-shadow:
+        var(--shadow),
+        0 0 8px rgba(255, 172, 65, 0.24),
+        inset 0 0 30px rgba(255, 153, 38, 0.03);
     }
 
     .panel-header {
       display: flex;
-      align-items: center;
-      gap: 11px;
       min-height: 64px;
-      padding: 17px 20px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px 13px;
+      border-bottom: 1px solid rgba(255, 167, 52, 0.18);
     }
 
     .panel-icon {
@@ -281,51 +222,32 @@
       height: 34px;
       flex: 0 0 auto;
       place-items: center;
-      border: 1px solid rgba(255, 154, 44, 0.28);
-      border-radius: 10px;
-      background: rgba(255, 145, 31, 0.08);
+      border: 1px solid rgba(255, 166, 47, 0.32);
+      border-radius: 9px;
       color: var(--orange);
     }
 
-    .chat-panel .panel-icon {
-      border-color: rgba(87, 157, 255, 0.3);
-      background: rgba(87, 157, 255, 0.09);
-      color: var(--blue-soft);
-    }
-
     .panel-icon svg,
-    .action svg {
+    .action svg,
+    .schedule-link svg,
+    .social-link svg {
       width: 20px;
       height: 20px;
       fill: none;
       stroke: currentColor;
       stroke-linecap: round;
       stroke-linejoin: round;
-      stroke-width: 1.8;
-    }
-
-    .panel-heading {
-      min-width: 0;
+      stroke-width: 1.9;
     }
 
     .panel-heading h2 {
       margin: 0;
-      color: #ffe3bd;
-      font-size: 0.89rem;
-      font-weight: 800;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-    }
-
-    .chat-panel .panel-heading h2 {
-      color: #d7e8ff;
-    }
-
-    .panel-heading p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 0.68rem;
+      color: var(--orange);
+      font-family: "Oswald", sans-serif;
+      font-size: 1.17rem;
       font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .embed-wrap {
@@ -333,11 +255,11 @@
       display: flex;
       min-height: 0;
       flex: 1;
-      margin: 10px;
+      margin: 8px 10px 0;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.075);
-      border-radius: 15px;
-      background: #121416;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: #15191c;
     }
 
     .embed-wrap iframe {
@@ -346,232 +268,523 @@
       height: 100%;
       min-height: 0;
       border: 0;
-      background: #121416;
+      background: #15191c;
     }
 
-    .player-topbar {
+    .schedule-footer {
       display: flex;
+      min-height: 48px;
       align-items: center;
       justify-content: center;
-      gap: 11px;
-      padding: 17px 18px 10px;
-      color: #ffbd82;
+      padding: 7px 12px 10px;
+    }
+
+    .schedule-link {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 7px 18px;
+      border: 1px solid rgba(87, 157, 255, 0.23);
+      border-radius: 8px;
+      color: var(--blue-bright);
       font-size: 0.66rem;
       font-weight: 800;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .schedule-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .schedule-link:hover {
+      border-color: rgba(87, 157, 255, 0.72);
+      background: rgba(87, 157, 255, 0.07);
+    }
+
+    .live-row {
+      display: flex;
+      min-height: 63px;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding-top: 8px;
+      color: var(--orange-hot);
+    }
+
+    .live-wave {
+      width: 46px;
+      height: 12px;
+      opacity: 0.82;
+      background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 5px);
+      clip-path: polygon(0 45%, 8% 45%, 8% 25%, 15% 25%, 15% 70%, 23% 70%, 23% 5%, 31% 5%, 31% 95%, 39% 95%, 39% 30%, 47% 30%, 47% 76%, 55% 76%, 55% 15%, 63% 15%, 63% 88%, 71% 88%, 71% 38%, 80% 38%, 80% 62%, 88% 62%, 88% 45%, 100% 45%, 100% 55%, 0 55%);
+    }
+
+    .live-badge {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 7px 17px;
+      border: 2px solid var(--orange-hot);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(126, 30, 7, 0.68), rgba(39, 10, 4, 0.88));
+      color: #fff2e8;
+      box-shadow: 0 0 13px rgba(255, 75, 0, 0.55), inset 0 0 12px rgba(255, 74, 0, 0.15);
+      font-family: "Oswald", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1;
       text-transform: uppercase;
     }
 
-    .sound-wave {
-      width: 46px;
-      height: 10px;
-      opacity: 0.75;
-      background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 5px);
-      clip-path: polygon(0 45%, 8% 45%, 8% 28%, 15% 28%, 15% 65%, 23% 65%, 23% 10%, 31% 10%, 31% 88%, 39% 88%, 39% 33%, 47% 33%, 47% 70%, 55% 70%, 55% 20%, 63% 20%, 63% 82%, 71% 82%, 71% 40%, 80% 40%, 80% 60%, 88% 60%, 88% 45%, 100% 45%, 100% 55%, 0 55%);
+    .live-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ff5216;
+      box-shadow: 0 0 11px rgba(255, 78, 21, 0.95);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      50% { opacity: 0.55; transform: scale(0.82); }
+    }
+
+    .station-copy {
+      padding: 0 18px 9px;
+      text-align: center;
+    }
+
+    .station-copy h2 {
+      margin: 0;
+      font-family: "Oswald", sans-serif;
+      font-size: 1.38rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .station-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 500;
     }
 
     .now-playing {
       display: grid;
-      grid-template-columns: minmax(118px, 42%) minmax(0, 1fr);
-      gap: clamp(16px, 3vw, 26px);
+      grid-template-columns: minmax(165px, 47%) minmax(0, 1fr);
+      gap: 20px;
       align-items: center;
-      padding: 14px 24px 8px;
+      padding: 10px 26px 8px;
     }
 
     .artwork-frame {
       position: relative;
       width: 100%;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9px;
       aspect-ratio: 1;
-      background: #171615;
-      box-shadow: 0 17px 34px rgba(0, 0, 0, 0.44);
-    }
-
-    .artwork-frame::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(140deg, rgba(255, 255, 255, 0.09), transparent 35%, rgba(0, 0, 0, 0.12));
+      background: #151515;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.46);
     }
 
     .artwork {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .track-label {
-      margin: 0 0 10px;
-      color: var(--blue-soft);
-      font-size: 0.66rem;
-      font-weight: 800;
-      letter-spacing: 0.17em;
-      text-transform: uppercase;
-    }
-
     .track-title {
       margin: 0;
       overflow-wrap: anywhere;
-      font-family: "Oswald", "Arial Narrow", sans-serif;
-      font-size: clamp(1.65rem, 2.4vw, 2.25rem);
-      font-weight: 600;
-      letter-spacing: 0.015em;
-      line-height: 1.05;
+      font-family: "Oswald", sans-serif;
+      font-size: clamp(1.45rem, 2.15vw, 2rem);
+      font-weight: 500;
+      line-height: 1.08;
       text-wrap: balance;
     }
 
     .track-artist {
-      margin: 9px 0 0;
+      margin: 8px 0 0;
       overflow-wrap: anywhere;
       color: var(--blue);
-      font-size: clamp(0.95rem, 1.7vw, 1.25rem);
+      font-size: clamp(1rem, 1.4vw, 1.2rem);
       font-weight: 700;
     }
 
     .track-note {
-      margin: 14px 0 0;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 18px 0 0;
+      padding-top: 17px;
+      border-top: 1px solid rgba(255, 255, 255, 0.11);
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       line-height: 1.55;
     }
 
-    .player-embed {
-      margin: 12px 20px 0;
-      overflow: hidden;
-      border: 1px solid rgba(87, 157, 255, 0.17);
-      border-radius: 16px;
+    .track-note strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--blue);
+      font-size: 0.67rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .custom-player {
+      margin: 3px 22px 0;
+    }
+
+    .custom-player audio {
+      display: none;
+    }
+
+    .transport-row {
+      display: grid;
+      min-height: 103px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .transport-button {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #dddcd7;
+      place-items: center;
+    }
+
+    .transport-button svg {
+      width: 27px;
+      height: 27px;
+      fill: currentColor;
+    }
+
+    .transport-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+
+    .play-button {
+      position: relative;
+      display: grid;
+      width: 96px;
+      height: 96px;
+      padding: 0;
+      border: 3px solid #66a8ff;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(52, 100, 183, 0.6), rgba(9, 24, 55, 0.95) 62%),
+        #0c1831;
+      color: #fffdf7;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.4),
+        0 0 24px rgba(46, 116, 255, 0.78),
+        inset 0 0 24px rgba(92, 155, 255, 0.3);
+      cursor: pointer;
+      place-items: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .play-button::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      pointer-events: none;
+      border: 1px solid rgba(176, 211, 255, 0.34);
+      border-radius: 50%;
+    }
+
+    .play-button:hover {
+      border-color: #9bc8ff;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.5),
+        0 0 31px rgba(46, 116, 255, 0.92),
+        inset 0 0 26px rgba(92, 155, 255, 0.38);
+      transform: scale(1.03);
+    }
+
+    .play-button:disabled {
+      cursor: wait;
+      opacity: 0.78;
+      transform: none;
+    }
+
+    .play-button svg {
+      position: relative;
+      z-index: 1;
+      width: 42px;
+      height: 42px;
+      fill: currentColor;
+    }
+
+    .play-button .play-icon {
+      margin-left: 5px;
+    }
+
+    .play-button .pause-icon,
+    .play-button.is-playing .play-icon {
+      display: none;
+    }
+
+    .play-button.is-playing .pause-icon {
+      display: block;
+    }
+
+    .player-status {
+      min-height: 17px;
+      margin: 1px 0 5px;
+      color: #a9caff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .volume-row {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) 32px;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .volume-button,
+    .volume-high {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #e5e4df;
+      place-items: center;
+    }
+
+    .volume-button {
+      cursor: pointer;
+    }
+
+    .volume-button:hover {
+      color: var(--blue-bright);
+    }
+
+    .volume-button svg,
+    .volume-high svg {
+      width: 23px;
+      height: 23px;
+      fill: currentColor;
+    }
+
+    .volume-button .muted-icon,
+    .volume-button.is-muted .volume-icon {
+      display: none;
+    }
+
+    .volume-button.is-muted .muted-icon {
+      display: block;
+    }
+
+    .volume-control {
+      width: 100%;
+      height: 5px;
+      appearance: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue) 0 var(--volume, 80%), #666 0 100%);
+      cursor: pointer;
+    }
+
+    .volume-control::-webkit-slider-thumb {
+      width: 17px;
+      height: 17px;
+      appearance: none;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
+    }
+
+    .volume-control::-moz-range-thumb {
+      width: 17px;
+      height: 17px;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
+    }
+
+    .music-platforms {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 22px 18px;
+    }
+
+    .platform-link {
+      display: flex;
+      min-width: 0;
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      background: #090a0b;
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .platform-link img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      flex: 0 1 auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .platform-link.apple img {
+      height: 34px;
+    }
+
+    .platform-link.spotify img {
+      width: 88px;
+    }
+
+    .platform-link.youtube img {
+      width: 84px;
+    }
+
+    .platform-link:hover {
+      border-color: rgba(255, 199, 124, 0.72);
       background: #121416;
     }
 
-    .player-embed iframe {
-      display: block;
-      width: 100%;
-      height: 150px;
-      border: 0;
-    }
-
-    .spotify-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      align-self: center;
-      gap: 8px;
-      min-height: 38px;
-      margin: 12px auto 0;
-      padding: 8px 16px;
-      border: 1px solid rgba(63, 213, 113, 0.48);
-      border-radius: 999px;
-      color: #d8ffe5;
-      font-size: 0.67rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-    }
-
-    .spotify-link:hover {
-      border-color: #4ce17d;
-      background: rgba(50, 214, 105, 0.08);
-      transform: translateY(-1px);
-    }
-
-    .spotify-link[aria-disabled="true"] {
+    .platform-link[aria-disabled="true"] {
       cursor: default;
-      opacity: 0.5;
+      opacity: 0.46;
       pointer-events: none;
     }
 
-    .spotify-mark {
-      display: grid;
-      width: 19px;
-      height: 19px;
-      place-items: center;
-      border-radius: 50%;
-      background: #34d46d;
-      color: #07110a;
-      font-size: 0.72rem;
-      font-weight: 900;
-    }
-
-    .player-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: auto 20px 18px;
-      padding-top: 14px;
-    }
-
-    .action {
-      display: inline-flex;
-      min-width: 0;
-      min-height: 50px;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 1px solid rgba(87, 157, 255, 0.55);
-      border-radius: 13px;
-      background: linear-gradient(180deg, rgba(22, 63, 126, 0.8), rgba(8, 32, 73, 0.86));
-      color: #e7f2ff;
-      box-shadow: inset 0 0 20px rgba(87, 157, 255, 0.13), 0 0 18px rgba(38, 112, 229, 0.08);
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: transform 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
-    }
-
-    .action.contact {
-      border-color: rgba(255, 137, 34, 0.62);
-      background: linear-gradient(180deg, rgba(108, 37, 8, 0.82), rgba(55, 17, 5, 0.9));
-      color: #ffe6c9;
-      box-shadow: inset 0 0 20px rgba(255, 99, 15, 0.12), 0 0 18px rgba(255, 97, 14, 0.08);
-    }
-
-    .action:hover {
-      filter: brightness(1.13);
-      transform: translateY(-2px);
-    }
-
-    .action:focus-visible,
-    .spotify-link:focus-visible {
-      outline: 3px solid rgba(255, 255, 255, 0.9);
+    .platform-link:focus-visible,
+    .contact-link:focus-visible,
+    .schedule-link:focus-visible,
+    .social-link:focus-visible,
+    .play-button:focus-visible,
+    .volume-button:focus-visible,
+    .volume-control:focus-visible {
+      outline: 3px solid #fff;
       outline-offset: 3px;
     }
 
     .site-footer {
       display: flex;
+      min-height: 133px;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 18px;
-      min-height: 58px;
-      color: #c8c0b7;
-      font-family: "Oswald", "Arial Narrow", sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
+      gap: 16px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, rgba(4, 4, 4, 0.45), rgba(4, 4, 4, 0.84));
+    }
+
+    .footer-tagline {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      color: #d8d0c7;
+      font-family: "Oswald", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
       text-align: center;
-      text-transform: uppercase;
     }
 
-    .site-footer::before,
-    .site-footer::after {
+    .footer-tagline::before,
+    .footer-tagline::after {
       content: "";
-      width: min(16vw, 190px);
+      width: min(18vw, 250px);
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 156, 46, 0.45));
+      background: linear-gradient(90deg, transparent, rgba(255, 156, 48, 0.45));
     }
 
-    .site-footer::after {
+    .footer-tagline::after {
       transform: rotate(180deg);
     }
 
+    .social-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-link {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      color: var(--blue);
+      text-decoration: none;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-link:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .contact-link {
+      display: inline-flex;
+      min-height: 30px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 5px 13px;
+      border: 1px solid rgba(255, 139, 33, 0.64);
+      border-radius: 999px;
+      background: rgba(76, 27, 5, 0.42);
+      color: #ffd8ac;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .contact-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .contact-link:hover {
+      border-color: var(--orange);
+      background: rgba(129, 43, 4, 0.56);
+      transform: translateY(-1px);
+    }
+
     @media (max-width: 1180px) {
+      .site-shell {
+        width: min(1080px, calc(100% - 28px));
+      }
+
       .studio-grid {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         grid-template-areas:
@@ -579,27 +792,14 @@
           "schedule chat";
       }
 
-      .panel {
-        height: 650px;
-      }
-
-      .player-panel {
-        min-height: 570px;
-        height: auto;
-      }
-
-      .now-playing {
-        grid-template-columns: 190px minmax(0, 1fr);
-        max-width: 720px;
-        width: 100%;
+      .player-column {
+        width: min(650px, 100%);
         margin: 0 auto;
       }
 
-      .player-embed,
-      .player-actions {
-        width: min(700px, calc(100% - 40px));
-        margin-right: auto;
-        margin-left: auto;
+      .schedule-panel,
+      .chat-panel {
+        height: 660px;
       }
     }
 
@@ -609,50 +809,36 @@
       }
 
       .site-shell {
-        width: min(100% - 20px, 650px);
-        padding-top: 8px;
+        width: min(100% - 18px, 620px);
       }
 
       .site-header {
-        grid-template-columns: 1fr auto;
-        min-height: 80px;
-      }
-
-      .header-kicker {
-        display: none;
+        min-height: 84px;
       }
 
       .brand {
-        justify-content: flex-start;
         gap: 10px;
       }
 
       .brand-mark {
-        width: 66px;
-        height: 56px;
+        width: 48px;
+        height: 48px;
       }
 
       .brand-name {
-        font-size: clamp(1.55rem, 8vw, 2.1rem);
-      }
-
-      .brand-tagline {
-        display: none;
-      }
-
-      .live-pill {
-        padding: 8px 10px;
-        font-size: 0.62rem;
+        font-size: clamp(1.85rem, 10vw, 2.5rem);
       }
 
       .studio-grid {
         display: flex;
         flex-direction: column;
         gap: 14px;
+        padding-top: 8px;
       }
 
-      .player-panel {
+      .player-column {
         order: 1;
+        width: 100%;
       }
 
       .schedule-panel {
@@ -664,9 +850,11 @@
       }
 
       .panel {
-        min-height: 0;
+        border-radius: 16px;
+      }
+
+      .player-panel {
         height: auto;
-        border-radius: 18px;
       }
 
       .schedule-panel {
@@ -679,96 +867,120 @@
 
       .panel-header {
         min-height: 58px;
-        padding: 13px 14px 11px;
+        padding: 12px 14px 10px;
       }
 
-      .embed-wrap {
-        margin: 8px;
+      .panel-heading h2 {
+        font-size: 1rem;
       }
 
-      .player-topbar {
-        padding-top: 14px;
+      .live-row {
+        min-height: 56px;
+      }
+
+      .live-badge {
+        min-height: 37px;
+        font-size: 1.05rem;
+      }
+
+      .live-wave {
+        width: 34px;
+      }
+
+      .station-copy h2 {
+        font-size: 1.2rem;
       }
 
       .now-playing {
-        grid-template-columns: 112px minmax(0, 1fr);
+        grid-template-columns: 118px minmax(0, 1fr);
         gap: 14px;
-        padding: 8px 14px 4px;
-      }
-
-      .track-label {
-        margin-bottom: 6px;
-        font-size: 0.58rem;
+        padding: 7px 14px 5px;
       }
 
       .track-title {
-        font-size: clamp(1.45rem, 7.4vw, 2rem);
+        font-size: clamp(1.35rem, 7vw, 1.85rem);
       }
 
       .track-artist {
-        margin-top: 5px;
-        font-size: 0.9rem;
+        font-size: 0.92rem;
       }
 
       .track-note {
         display: none;
       }
 
-      .player-embed {
-        margin: 12px 12px 0;
+      .custom-player {
+        margin: 2px 12px 0;
       }
 
-      .player-embed iframe {
-        height: 148px;
+      .transport-row {
+        min-height: 92px;
       }
 
-      .player-actions {
-        gap: 8px;
-        margin: 14px 12px 12px;
-        padding: 0;
+      .play-button {
+        width: 84px;
+        height: 84px;
       }
 
-      .action {
-        min-height: 46px;
-        gap: 7px;
-        padding: 8px;
-        font-size: 0.64rem;
-        letter-spacing: 0.04em;
+      .play-button svg {
+        width: 37px;
+        height: 37px;
       }
 
-      .action svg {
-        width: 17px;
-        height: 17px;
+      .player-status {
+        margin-bottom: 3px;
+      }
+
+      .music-platforms {
+        gap: 6px;
+        margin: 12px 12px 14px;
+      }
+
+      .platform-link {
+        min-height: 44px;
+        padding: 3px;
+      }
+
+      .platform-link.apple img {
+        height: 30px;
+      }
+
+      .platform-link.spotify img {
+        width: 80px;
+      }
+
+      .platform-link.youtube img {
+        width: 76px;
       }
 
       .site-footer {
-        padding: 16px 10px 4px;
-        font-size: 0.7rem;
+        min-height: 120px;
+        margin-top: 14px;
+      }
+
+      .footer-tagline {
+        font-size: 0.78rem;
         line-height: 1.5;
       }
 
-      .site-footer::before,
-      .site-footer::after {
+      .footer-tagline::before,
+      .footer-tagline::after {
         display: none;
       }
     }
 
     @media (max-width: 390px) {
-      .brand-mark {
-        width: 55px;
-        height: 48px;
-      }
-
       .brand-name {
-        font-size: 1.5rem;
+        font-size: 1.82rem;
       }
 
-      .live-pill span:last-child {
-        display: none;
+      .brand-mark {
+        width: 43px;
+        height: 43px;
       }
 
       .now-playing {
-        grid-template-columns: 96px minmax(0, 1fr);
+        grid-template-columns: 102px minmax(0, 1fr);
       }
     }
 
@@ -790,21 +1002,9 @@
 
   <div class="site-shell">
     <header class="site-header">
-      <div class="header-kicker">Independent internet radio</div>
-
       <div class="brand" aria-label="WTinyRadio home">
-        <img class="brand-mark" src="./logo-header.jpg" alt="">
-        <div class="brand-copy">
-          <p class="brand-name">WTinyRadio</p>
-          <span class="brand-tagline">The best radio station you've never heard before</span>
-        </div>
-      </div>
-
-      <div class="header-status">
-        <div class="live-pill" aria-label="WTinyRadio is live">
-          <span class="live-dot" aria-hidden="true"></span>
-          <span>Live now</span>
-        </div>
+        <img class="brand-mark" src="./512x512.png" alt="">
+        <p class="brand-name">WTinyRadio</p>
       </div>
     </header>
 
@@ -816,7 +1016,6 @@
           </span>
           <div class="panel-heading">
             <h2 id="schedule-title">Weekly schedule</h2>
-            <p>See what's coming up on WTinyRadio</p>
           </div>
         </header>
 
@@ -827,54 +1026,85 @@
             loading="eager">
           </iframe>
         </div>
-      </section>
 
-      <section class="panel player-panel" aria-labelledby="trackTitle">
-        <div class="player-topbar" aria-label="Live on air">
-          <span class="sound-wave" aria-hidden="true"></span>
-          <span>On air now</span>
-          <span class="sound-wave" aria-hidden="true"></span>
-        </div>
-
-        <div class="now-playing" aria-live="polite">
-          <div class="artwork-frame">
-            <img id="albumArtwork" class="artwork" src="./512x512.png" alt="WTinyRadio artwork">
-          </div>
-
-          <div class="track-copy">
-            <p class="track-label">Currently playing</p>
-            <h1 id="trackTitle" class="track-title">WTinyRadio is live</h1>
-            <p id="trackArtist" class="track-artist">Press play to listen</p>
-            <p class="track-note">Live underground rock, alternative, metal, and deep cuts—streaming around the clock.</p>
-          </div>
-        </div>
-
-        <div class="player-embed">
-          <iframe
-            src="https://app.radiocult.fm/embed/player/mixman?theme=dusk&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;playerDisplay=metadata&amp;removeRcBranding=true"
-            title="WTinyRadio live player"
-            loading="eager"
-            allow="autoplay">
-          </iframe>
-        </div>
-
-        <a id="spotifyLink" class="spotify-link" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
-          <span class="spotify-mark" aria-hidden="true">≋</span>
-          <span>Open in Spotify</span>
-        </a>
-
-        <div class="player-actions">
-          <a id="nowPlayingBtn" class="action" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M9 18a3 3 0 1 1-3-3h3v3Zm11-2a3 3 0 1 1-3-3h3v3Z"/></svg>
-            <span>Now playing</span>
-          </a>
-
-          <a class="action contact" href="mailto:support@wtinyradio.com">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>
-            <span>Contact</span>
+        <div class="schedule-footer">
+          <a class="schedule-link" href="https://app.radiocult.fm/embed/schedule/mixman/show-list?theme=dusk&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span>View full schedule</span>
           </a>
         </div>
       </section>
+
+      <div class="player-column">
+        <section class="panel player-panel" aria-labelledby="trackTitle">
+          <div class="live-row" aria-label="WTinyRadio is live">
+            <span class="live-wave" aria-hidden="true"></span>
+            <span class="live-badge"><span class="live-dot" aria-hidden="true"></span>Live</span>
+            <span class="live-wave" aria-hidden="true"></span>
+          </div>
+
+          <div class="station-copy">
+            <h2>WTinyRadio</h2>
+            <p>The best radio station you've never heard before</p>
+          </div>
+
+          <div class="now-playing" aria-live="polite">
+            <div class="artwork-frame">
+              <img id="albumArtwork" class="artwork" src="./512x512.png" alt="WTinyRadio artwork">
+            </div>
+
+            <div class="track-copy">
+              <h1 id="trackTitle" class="track-title">WTinyRadio is live</h1>
+              <p id="trackArtist" class="track-artist">Press play to listen</p>
+              <p class="track-note"><strong>Currently playing</strong>Thanks for listening to WTinyRadio</p>
+            </div>
+          </div>
+
+          <div class="custom-player">
+            <audio id="radioAudio" preload="none" playsinline src="https://mixman.radiocult.fm/stream"></audio>
+
+            <div class="transport-row" aria-label="Live radio controls">
+              <button class="transport-button" type="button" disabled aria-label="Previous track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h2v14H5V5Zm14 0v14L9 12l10-7Z"/></svg>
+              </button>
+
+              <button id="playButton" class="play-button" type="button" aria-label="Play WTinyRadio live stream" aria-pressed="false">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/></svg>
+              </button>
+
+              <button class="transport-button" type="button" disabled aria-label="Next track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5h2v14h-2V5ZM5 5l10 7-10 7V5Z"/></svg>
+              </button>
+            </div>
+
+            <p id="playerStatus" class="player-status" role="status">Press play to listen live</p>
+
+            <div class="volume-row">
+              <button id="muteButton" class="volume-button" type="button" aria-label="Mute WTinyRadio" aria-pressed="false">
+                <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Z"/></svg>
+                <svg class="muted-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.1.7 1.4-1.4 1.8 1.8 1.8-1.8 1.4 1.4-1.8 1.8 1.8 1.8-1.4 1.4-1.8-1.8-1.8 1.8-1.4-1.4 1.8-1.8-1.8-1.8Z"/></svg>
+              </button>
+              <input id="volumeControl" class="volume-control" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="WTinyRadio volume">
+              <span class="volume-high" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Zm2.8-3a9 9 0 0 1 0 13.4l1.4 1.4a11 11 0 0 0 0-16.2l-1.4 1.4Z"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <nav class="music-platforms" aria-label="Find the current song on a music service">
+            <a id="appleMusicLink" class="platform-link apple" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Apple Music" aria-disabled="true">
+              <img src="./apple-music-listen-badge.svg" alt="Listen on Apple Music">
+            </a>
+            <a id="spotifyLink" class="platform-link spotify" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Spotify" aria-disabled="true">
+              <img src="./spotify-full-logo-green.svg" alt="Spotify">
+            </a>
+            <a id="youtubeMusicLink" class="platform-link youtube" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on YouTube Music" aria-disabled="true">
+              <img src="./youtube-music-logo.svg" alt="YouTube Music">
+            </a>
+          </nav>
+        </section>
+      </div>
 
       <section class="panel chat-panel" aria-labelledby="chat-title">
         <header class="panel-header">
@@ -883,11 +1113,10 @@
           </span>
           <div class="panel-heading">
             <h2 id="chat-title">Community chat</h2>
-            <p>Hang out with listeners while the music plays</p>
           </div>
         </header>
 
-        <div class="embed-wrap">
+        <div class="embed-wrap" style="margin-bottom: 10px;">
           <iframe
             src="https://app.radiocult.fm/embed/chat/mixman?theme=midnight&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true"
             title="WTinyRadio community chat"
@@ -897,29 +1126,89 @@
       </section>
     </main>
 
-    <footer class="site-footer">The best radio station you've never heard before</footer>
+    <footer class="site-footer">
+      <div class="footer-tagline">The best radio station you've never heard before</div>
+      <nav class="social-links" aria-label="WTinyRadio social links">
+        <a class="social-link" href="https://www.facebook.com/Wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1Z"/></svg>
+        </a>
+        <a class="social-link" href="https://x.com/wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on X">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l14 16M19 4 5 20"/></svg>
+        </a>
+        <a class="social-link" href="https://www.instagram.com/cugaz" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        </a>
+      </nav>
+      <a class="contact-link" href="mailto:support@wtinyradio.com">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>
+        <span>Contact us</span>
+      </a>
+    </footer>
   </div>
 
   <script>
     const STATION_ID = "mixman";
     const FALLBACK_ARTWORK = "./512x512.png";
+    const STREAM_URL = "https://mixman.radiocult.fm/stream";
     const liveEndpoint = `https://api.radiocult.fm/api/station/${STATION_ID}/schedule/live`;
 
     const titleElement = document.getElementById("trackTitle");
     const artistElement = document.getElementById("trackArtist");
     const artworkElement = document.getElementById("albumArtwork");
+    const radioAudio = document.getElementById("radioAudio");
+    const playButton = document.getElementById("playButton");
+    const playerStatus = document.getElementById("playerStatus");
+    const muteButton = document.getElementById("muteButton");
+    const volumeControl = document.getElementById("volumeControl");
     const spotifyLink = document.getElementById("spotifyLink");
-    const nowPlayingButton = document.getElementById("nowPlayingBtn");
+    const appleMusicLink = document.getElementById("appleMusicLink");
+    const youtubeMusicLink = document.getElementById("youtubeMusicLink");
 
     function firstValue(...values) {
       return values.find((value) => typeof value === "string" && value.trim())?.trim() || "";
     }
 
-    function setSpotifyDestination(url) {
-      [spotifyLink, nowPlayingButton].forEach((link) => {
-        link.href = url || "#";
-        link.setAttribute("aria-disabled", url ? "false" : "true");
-      });
+    function setMusicDestination(link, url) {
+      link.href = url || "#";
+      link.setAttribute("aria-disabled", url ? "false" : "true");
+    }
+
+    function updatePlaybackState(isPlaying, statusText) {
+      playButton.classList.toggle("is-playing", isPlaying);
+      playButton.setAttribute("aria-pressed", String(isPlaying));
+      playButton.setAttribute("aria-label", isPlaying ? "Pause WTinyRadio live stream" : "Play WTinyRadio live stream");
+      if (statusText) playerStatus.textContent = statusText;
+    }
+
+    function updateVolumeDisplay() {
+      const volume = radioAudio.muted ? 0 : radioAudio.volume;
+      volumeControl.value = String(volume);
+      volumeControl.style.setProperty("--volume", `${Math.round(volume * 100)}%`);
+      muteButton.classList.toggle("is-muted", radioAudio.muted || radioAudio.volume === 0);
+      muteButton.setAttribute("aria-pressed", String(radioAudio.muted || radioAudio.volume === 0));
+      muteButton.setAttribute("aria-label", radioAudio.muted || radioAudio.volume === 0 ? "Unmute WTinyRadio" : "Mute WTinyRadio");
+    }
+
+    async function togglePlayback() {
+      if (!radioAudio.paused) {
+        radioAudio.pause();
+        updatePlaybackState(false, "Paused — press play to return live");
+        return;
+      }
+
+      playButton.disabled = true;
+      playerStatus.textContent = "Connecting to the live stream…";
+
+      try {
+        radioAudio.src = STREAM_URL;
+        radioAudio.load();
+        await radioAudio.play();
+      } catch (error) {
+        updatePlaybackState(false, "Stream temporarily unavailable");
+        console.info("Live audio could not start.", error);
+      } finally {
+        playButton.disabled = false;
+      }
     }
 
     function applyNowPlaying(result) {
@@ -949,7 +1238,17 @@
           ? `https://open.spotify.com/search/${encodeURIComponent(`${artist} ${title}`)}`
           : "";
 
-      setSpotifyDestination(spotifyUrl);
+      const searchQuery = title && artist ? `${artist} ${title}` : "";
+      const appleMusicUrl = searchQuery
+        ? `https://music.apple.com/us/search?term=${encodeURIComponent(searchQuery)}`
+        : "";
+      const youtubeMusicUrl = searchQuery
+        ? `https://music.youtube.com/search?q=${encodeURIComponent(searchQuery)}`
+        : "";
+
+      setMusicDestination(spotifyLink, spotifyUrl);
+      setMusicDestination(appleMusicLink, appleMusicUrl);
+      setMusicDestination(youtubeMusicLink, youtubeMusicUrl);
     }
 
     async function updateNowPlaying() {
@@ -967,6 +1266,30 @@
       if (!artworkElement.src.endsWith("512x512.png")) artworkElement.src = FALLBACK_ARTWORK;
     });
 
+    playButton.addEventListener("click", togglePlayback);
+
+    radioAudio.addEventListener("playing", () => updatePlaybackState(true, "Live stream playing"));
+    radioAudio.addEventListener("waiting", () => {
+      if (!radioAudio.paused) playerStatus.textContent = "Reconnecting to the live stream…";
+    });
+    radioAudio.addEventListener("pause", () => {
+      if (!playButton.disabled) updatePlaybackState(false, "Paused — press play to return live");
+    });
+    radioAudio.addEventListener("error", () => updatePlaybackState(false, "Stream temporarily unavailable"));
+
+    muteButton.addEventListener("click", () => {
+      radioAudio.muted = !radioAudio.muted;
+      updateVolumeDisplay();
+    });
+
+    volumeControl.addEventListener("input", () => {
+      radioAudio.volume = Number(volumeControl.value);
+      radioAudio.muted = radioAudio.volume === 0;
+      updateVolumeDisplay();
+    });
+
+    radioAudio.volume = 0.8;
+    updateVolumeDisplay();
     updateNowPlaying();
     window.setInterval(updateNowPlaying, 15000);
   </script>
