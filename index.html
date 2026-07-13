@@ -402,6 +402,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 1;
+      transition: opacity 0.24s ease;
+    }
+
+    .artwork.is-loading {
+      opacity: 0.42;
     }
 
     .track-title {
@@ -523,16 +529,17 @@
       transform: none;
     }
 
-    .play-button svg {
+    .player-state-icon {
       position: relative;
       z-index: 1;
-      width: 42px;
-      height: 42px;
-      fill: currentColor;
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      pointer-events: none;
     }
 
     .play-button .play-icon {
-      margin-left: 5px;
+      margin-left: 4px;
     }
 
     .play-button .pause-icon,
@@ -922,9 +929,9 @@
         height: 84px;
       }
 
-      .play-button svg {
-        width: 37px;
-        height: 37px;
+      .player-state-icon {
+        width: 51px;
+        height: 51px;
       }
 
       .player-status {
@@ -1069,8 +1076,8 @@
               </button>
 
               <button id="playButton" class="play-button" type="button" aria-label="Play WTinyRadio live stream" aria-pressed="false">
-                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
-                <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/></svg>
+                <img class="player-state-icon play-icon" src="./player-play-blue.png" alt="" aria-hidden="true">
+                <img class="player-state-icon pause-icon" src="./player-pause-blue.png" alt="" aria-hidden="true">
               </button>
 
               <button class="transport-button" type="button" disabled aria-label="Next track is unavailable on live radio">
@@ -1168,6 +1175,31 @@
       return values.find((value) => typeof value === "string" && value.trim())?.trim() || "";
     }
 
+    function artworkValue(value) {
+      if (typeof value === "string") return value.trim();
+      if (!value || typeof value !== "object") return "";
+
+      return firstValue(
+        value["512x512"],
+        value.default,
+        value.original,
+        value["256x256"],
+        value["128x128"]
+      );
+    }
+
+    function setArtwork(source, title, artist) {
+      const nextSource = source || FALLBACK_ARTWORK;
+      const nextAlt = source ? `Artwork for ${title} by ${artist}` : "WTinyRadio artwork";
+
+      artworkElement.alt = nextAlt;
+      if (artworkElement.dataset.source === nextSource) return;
+
+      artworkElement.dataset.source = nextSource;
+      artworkElement.classList.add("is-loading");
+      artworkElement.src = nextSource;
+    }
+
     function setMusicDestination(link, url) {
       link.href = url || "#";
       link.setAttribute("aria-disabled", url ? "false" : "true");
@@ -1220,16 +1252,16 @@
       const artist = firstValue(recognized?.artist, stationMetadata.artist, "Press play to listen");
       const artwork = firstValue(
         recognized?.artworkUrl,
-        recognized?.artwork,
-        recognized?.albumArtwork,
+        artworkValue(recognized?.artwork),
+        artworkValue(recognized?.albumArtwork),
         stationMetadata.artworkUrl,
-        stationMetadata.artwork
+        artworkValue(stationMetadata.artwork),
+        artworkValue(stationMetadata.albumArtwork)
       );
 
       titleElement.textContent = title;
       artistElement.textContent = artist;
-      artworkElement.src = artwork || FALLBACK_ARTWORK;
-      artworkElement.alt = artwork ? `Artwork for ${title} by ${artist}` : "WTinyRadio artwork";
+      setArtwork(artwork, title, artist);
 
       const spotifyTrackId = firstValue(recognized?.spotifyTrackId);
       const spotifyUrl = spotifyTrackId
@@ -1262,8 +1294,17 @@
       }
     }
 
+    artworkElement.addEventListener("load", () => {
+      artworkElement.classList.remove("is-loading");
+    });
+
     artworkElement.addEventListener("error", () => {
-      if (!artworkElement.src.endsWith("512x512.png")) artworkElement.src = FALLBACK_ARTWORK;
+      artworkElement.classList.remove("is-loading");
+      if (artworkElement.dataset.source !== FALLBACK_ARTWORK) {
+        artworkElement.dataset.source = FALLBACK_ARTWORK;
+        artworkElement.src = FALLBACK_ARTWORK;
+        artworkElement.alt = "WTinyRadio artwork";
+      }
     });
 
     playButton.addEventListener("click", togglePlayback);
