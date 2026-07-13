@@ -447,7 +447,8 @@
     }
 
     .custom-player {
-      margin: 3px 22px 0;
+      margin: auto 22px 0;
+      padding-top: 28px;
     }
 
     .custom-player audio {
@@ -552,14 +553,15 @@
     }
 
     .player-status {
-      min-height: 17px;
-      margin: 1px 0 5px;
-      color: #a9caff;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-align: center;
-      text-transform: uppercase;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
 
     .volume-row {
@@ -917,7 +919,8 @@
       }
 
       .custom-player {
-        margin: 2px 12px 0;
+        margin: 0 12px;
+        padding-top: 22px;
       }
 
       .transport-row {
@@ -932,10 +935,6 @@
       .player-state-icon {
         width: 51px;
         height: 51px;
-      }
-
-      .player-status {
-        margin-bottom: 3px;
       }
 
       .music-platforms {
