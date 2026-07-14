@@ -1499,14 +1499,8 @@
         border-radius: 16px;
       }
 
-      .player-panel {
-        height: auto;
-      }
-
-      .schedule-panel {
-        height: 420px;
-      }
-
+      .player-panel,
+      .schedule-panel,
       .chat-panel {
         height: 560px;
       }
@@ -1929,13 +1923,14 @@
     </footer>
   </div>
 
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script>
   <script>
     const STATION_ID = "mixman";
     const FALLBACK_ARTWORK = "./512x512.png";
     const STREAM_URL = "https://mixman.radiocult.fm/stream";
     const DATA_API_BASE = "https://radio-api.wtinyradio.com";
     const liveEndpoint = `${DATA_API_BASE}/live`;
-    const CHAT_SOCKET_URL = `wss://api.radiocult.fm/socket.io/?stationId=${encodeURIComponent(STATION_ID)}&isEmbedded=true&EIO=4&transport=websocket`;
+    const CHAT_SOCKET_ORIGIN = "https://api.radiocult.fm";
 
     const titleElement = document.getElementById("trackTitle");
     const artistElement = document.getElementById("trackArtist");
@@ -2150,7 +2145,7 @@
     const scheduleLocale = navigator.language || "en-US";
     const stationTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Phoenix";
     let weeklySchedule = [];
-    let scheduleWeekView = false;
+    let scheduleWeekView = true;
 
     function getScheduleWeekStart(date = new Date()) {
       const start = new Date(date);
@@ -2354,7 +2349,6 @@
     const chatMessageStore = new Map();
     let chatSocket;
     let chatSocketReady = false;
-    let chatReconnectTimer;
     let chatHasRendered = false;
     let chatUser = null;
 
@@ -2519,49 +2513,51 @@
       }
     }
 
-    function parseChatSocketEvent(packet) {
-      if (packet === "2") {
-        if (chatSocket?.readyState === WebSocket.OPEN) chatSocket.send("3");
-        return;
-      }
-      if (packet.startsWith("0")) {
-        if (chatSocket?.readyState === WebSocket.OPEN) chatSocket.send("40");
-        return;
-      }
-      if (packet.startsWith("40")) {
-        chatSocketReady = true;
-        chatAudience.textContent = "Live chat";
-        return;
-      }
-      if (!packet.startsWith("42")) return;
-
-      try {
-        const [eventName, payload] = JSON.parse(packet.slice(2));
-        if (eventName === "message") mergeChatMessages(payload?.messages || payload);
-        if (eventName === "participants-list-update") {
-          const participants = payload?.participants;
-          const count = Array.isArray(participants) ? participants.length : Number(participants) || 0;
-          chatAudience.textContent = count ? `${count} online` : "Live chat";
-        }
-      } catch (error) {
-        console.info("A chat update could not be read.", error);
-      }
+    function updateChatParticipants(payload) {
+      const participants = payload?.participants;
+      const count = Array.isArray(participants) ? participants.length : Number(participants) || 0;
+      chatAudience.textContent = count ? `${count} online` : "Live chat";
     }
 
     function connectChatSocket() {
-      if (chatSocket && (chatSocket.readyState === WebSocket.OPEN || chatSocket.readyState === WebSocket.CONNECTING)) return;
-      window.clearTimeout(chatReconnectTimer);
+      if (chatSocket?.connected || chatSocket?.active) return;
       chatSocketReady = false;
       chatAudience.textContent = "Connecting…";
-      chatSocket = new WebSocket(CHAT_SOCKET_URL);
-      chatSocket.addEventListener("message", (event) => parseChatSocketEvent(String(event.data)));
-      chatSocket.addEventListener("close", () => {
+
+      if (typeof window.io !== "function") {
+        chatAudience.textContent = "Chat unavailable";
+        console.info("The live chat client could not be loaded.");
+        return;
+      }
+
+      chatSocket = window.io(CHAT_SOCKET_ORIGIN, {
+        path: "/socket.io/",
+        transports: ["websocket"],
+        query: {
+          stationId: STATION_ID,
+          isEmbedded: "true"
+        },
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        timeout: 10000
+      });
+
+      chatSocket.on("connect", () => {
+        chatSocketReady = true;
+        chatAudience.textContent = "Live chat";
+      });
+      chatSocket.on("message", (payload) => mergeChatMessages(payload?.messages || payload));
+      chatSocket.on("messages", (payload) => mergeChatMessages(payload?.messages || payload));
+      chatSocket.on("participants-list-update", updateChatParticipants);
+      chatSocket.on("disconnect", () => {
         chatSocketReady = false;
         chatAudience.textContent = "Reconnecting…";
-        chatReconnectTimer = window.setTimeout(connectChatSocket, 5000);
       });
-      chatSocket.addEventListener("error", () => {
+      chatSocket.on("connect_error", (error) => {
+        chatSocketReady = false;
         chatAudience.textContent = "Reconnecting…";
+        console.info("The live chat connection is retrying.", error?.message || error);
       });
     }
 
@@ -2594,8 +2590,8 @@
     }
 
     function sendChatSocketMessage(message) {
-      if (!chatSocketReady || chatSocket?.readyState !== WebSocket.OPEN) return false;
-      chatSocket.send(`42${JSON.stringify(["message", message])}`);
+      if (!chatSocketReady || !chatSocket?.connected) return false;
+      chatSocket.emit("message", message);
       mergeChatMessages(message);
       return true;
     }
