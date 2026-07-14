@@ -2610,6 +2610,11 @@
       chatNameDialog.hidden = true;
     }
 
+    function createChatUserId() {
+      if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+      return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+    }
+
     chatNameButton.addEventListener("click", openChatNameDialog);
     chatNameCancel.addEventListener("click", closeChatNameDialog);
     chatInput.addEventListener("focus", () => {
@@ -2624,25 +2629,13 @@
       const previousUser = chatUser;
       const submitButton = chatNameForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
-      chatStatus.textContent = "Saving your display name…";
+      chatStatus.textContent = "Joining chat…";
 
       try {
-        const requestUrl = previousUser
-          ? `${DATA_API_BASE}/chat/user/${encodeURIComponent(previousUser.userId)}/display-name`
-          : `${DATA_API_BASE}/chat/user`;
-        const response = await fetch(requestUrl, {
-          method: previousUser ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(previousUser ? { newDisplayName: displayName } : { displayName })
-        });
-        if (!response.ok) throw new Error(`Display name returned ${response.status}`);
-        const data = await response.json();
-        const savedUser = data.user || data.payload?.user;
         chatUser = {
-          userId: savedUser?.id || previousUser?.userId,
-          displayName: savedUser?.displayName || displayName
+          userId: previousUser?.userId || createChatUserId(),
+          displayName
         };
-        if (!chatUser.userId) throw new Error("RadioCult did not return a chat user.");
         localStorage.setItem("wtinyradio-chat-user", JSON.stringify(chatUser));
         updateChatIdentity();
         closeChatNameDialog();
@@ -2656,8 +2649,8 @@
           sendChatSocketMessage(createChatMessage(previousUser ? "user_name_change" : "user_joined", { text }));
         }
       } catch (error) {
-        chatStatus.textContent = "Your display name could not be saved. Please try again.";
-        console.info("Chat identity could not be saved.", error);
+        chatStatus.textContent = "Your chat name could not be saved. Please try again.";
+        console.info("Chat identity could not be stored.", error);
       } finally {
         submitButton.disabled = false;
       }
