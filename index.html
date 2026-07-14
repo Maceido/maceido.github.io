@@ -57,7 +57,7 @@
       color: var(--text);
       font-family: "Montserrat", system-ui, sans-serif;
       background:
-        linear-gradient(180deg, rgba(2, 2, 2, 0.1), rgba(2, 2, 2, 0.46) 78%, rgba(2, 2, 2, 0.94)),
+        linear-gradient(180deg, rgba(2, 2, 2, 0.24), rgba(2, 2, 2, 0.58) 76%, rgba(2, 2, 2, 0.95)),
         url("./background-optimized.jpg") center top / cover fixed,
         var(--black);
     }
@@ -104,16 +104,25 @@
     }
 
     .site-shell {
-      width: min(1460px, calc(100% - 42px));
+      width: min(1420px, calc(100% - 32px));
       margin: 0 auto;
     }
 
     .site-header {
+      position: relative;
       display: flex;
-      min-height: 104px;
+      min-height: 140px;
       align-items: center;
       justify-content: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .brand-lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 0 11px;
     }
 
     .brand {
@@ -125,13 +134,12 @@
     }
 
     .brand-mark {
-      width: 60px;
-      height: 60px;
+      width: 58px;
+      height: 58px;
       flex: 0 0 auto;
-      border: 1px solid rgba(255, 184, 91, 0.5);
       border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 22px rgba(255, 144, 31, 0.18);
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(255, 157, 39, 0.2));
     }
 
     .brand-name {
@@ -144,13 +152,23 @@
       text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
     }
 
+    .brand-tagline {
+      margin: 0;
+      color: #d1cbc3;
+      font-family: "Oswald", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
     .studio-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 0.92fr) minmax(420px, 1.14fr) minmax(300px, 0.92fr);
+      grid-template-columns: minmax(300px, 0.95fr) minmax(500px, 1.27fr) minmax(310px, 0.95fr);
       grid-template-areas: "schedule player chat";
-      gap: 26px;
+      gap: 18px;
       align-items: start;
-      padding: 12px 0 0;
+      padding: 0;
     }
 
     .panel {
@@ -159,8 +177,8 @@
       min-width: 0;
       flex-direction: column;
       overflow: hidden;
-      border: 2px solid var(--orange-line);
-      border-radius: var(--radius);
+      border: 1px solid var(--orange-line);
+      border-radius: 16px;
       background:
         linear-gradient(160deg, rgba(27, 24, 20, 0.28), transparent 33%),
         var(--panel);
@@ -183,12 +201,12 @@
 
     .schedule-panel {
       grid-area: schedule;
-      height: 706px;
+      height: 688px;
     }
 
     .chat-panel {
       grid-area: chat;
-      height: 706px;
+      height: 688px;
     }
 
     .player-column {
@@ -199,8 +217,8 @@
     }
 
     .player-panel {
-      height: 706px;
-      border-color: rgba(255, 207, 144, 0.85);
+      height: 688px;
+      border-color: rgba(255, 207, 144, 0.72);
       box-shadow:
         var(--shadow),
         0 0 8px rgba(255, 172, 65, 0.24),
@@ -250,6 +268,11 @@
       text-transform: uppercase;
     }
 
+    .panel-status,
+    .schedule-header-link {
+      display: none;
+    }
+
     .embed-wrap {
       position: relative;
       display: flex;
@@ -278,6 +301,488 @@
       box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.34);
     }
 
+    .schedule-content {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      flex-direction: column;
+      margin: 8px 10px 0;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 11px;
+      background: linear-gradient(160deg, rgba(17, 20, 22, 0.98), rgba(7, 8, 8, 0.98));
+    }
+
+    .schedule-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      min-height: 43px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(20, 22, 23, 0.84);
+    }
+
+    .schedule-day-tab {
+      min-width: 0;
+      padding: 0 3px;
+      border: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.045);
+      background: transparent;
+      color: #d4d0c9;
+      font-family: "Oswald", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .schedule-day-tab:last-child {
+      border-right: 0;
+    }
+
+    .schedule-day-tab:hover,
+    .schedule-day-tab:focus-visible {
+      color: #fff;
+      background: rgba(255, 157, 39, 0.08);
+    }
+
+    .schedule-day-tab[aria-selected="true"] {
+      background: linear-gradient(180deg, rgba(255, 157, 39, 0.18), rgba(255, 157, 39, 0.04));
+      color: var(--orange);
+      box-shadow: inset 0 -2px 0 var(--orange);
+    }
+
+    .schedule-date-bar {
+      display: flex;
+      min-height: 47px;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--orange);
+      font-size: 0.78rem;
+    }
+
+    .schedule-date-bar svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+    }
+
+    .schedule-timezone {
+      margin-left: auto;
+      color: #777a7d;
+      font-size: 0.56rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .schedule-list {
+      min-height: 0;
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-color: rgba(255, 157, 39, 0.42) transparent;
+      scrollbar-width: thin;
+    }
+
+    .schedule-row {
+      display: grid;
+      min-height: 66px;
+      grid-template-columns: 83px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .schedule-row:last-child {
+      border-bottom: 0;
+    }
+
+    .schedule-row:hover {
+      background: rgba(255, 157, 39, 0.035);
+    }
+
+    .schedule-time {
+      color: var(--orange);
+      font-family: "Oswald", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .schedule-show strong {
+      display: block;
+      overflow: hidden;
+      color: #f2efea;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .schedule-show span {
+      display: block;
+      margin-top: 3px;
+      overflow: hidden;
+      color: #a7a39d;
+      font-size: 0.65rem;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .schedule-group-label {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 7px 13px;
+      border-bottom: 1px solid rgba(255, 157, 39, 0.18);
+      background: rgba(13, 14, 14, 0.98);
+      color: var(--orange);
+      font-family: "Oswald", sans-serif;
+      font-size: 0.69rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .panel-state {
+      display: grid;
+      min-height: 160px;
+      padding: 22px;
+      color: #8d8b87;
+      font-size: 0.72rem;
+      line-height: 1.6;
+      text-align: center;
+      place-items: center;
+    }
+
+    .schedule-link {
+      cursor: pointer;
+    }
+
+    .chat-shell {
+      position: relative;
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      flex-direction: column;
+      margin: 8px 10px 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 11px;
+      background: linear-gradient(160deg, rgba(16, 19, 21, 0.98), rgba(8, 9, 10, 0.99));
+      box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.34);
+    }
+
+    .chat-topbar {
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(20, 23, 25, 0.86);
+    }
+
+    .chat-station-avatar,
+    .chat-avatar {
+      display: grid;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border-radius: 50%;
+      place-items: center;
+    }
+
+    .chat-station-avatar {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 157, 39, 0.35);
+      background: #080808;
+    }
+
+    .chat-station-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .chat-station-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .chat-station-copy strong {
+      display: block;
+      overflow: hidden;
+      color: #f6f3ee;
+      font-size: 0.78rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chat-live-count {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 3px;
+      color: #9b9e9f;
+      font-size: 0.59rem;
+    }
+
+    .chat-live-count::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #33d265;
+      box-shadow: 0 0 7px rgba(51, 210, 101, 0.7);
+    }
+
+    .chat-name-button {
+      max-width: 118px;
+      overflow: hidden;
+      padding: 6px 8px;
+      border: 1px solid rgba(87, 157, 255, 0.32);
+      border-radius: 6px;
+      background: rgba(19, 43, 74, 0.42);
+      color: var(--blue);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chat-messages {
+      min-height: 0;
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 10px 12px;
+      scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+      scrollbar-width: thin;
+    }
+
+    .chat-message {
+      display: grid;
+      grid-template-columns: 39px minmax(0, 1fr) auto;
+      gap: 9px;
+      padding: 10px 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+    }
+
+    .chat-message:last-child {
+      border-bottom: 0;
+    }
+
+    .chat-avatar {
+      width: 39px;
+      height: 39px;
+      align-self: start;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background: linear-gradient(145deg, #343b49, #121820);
+      color: #fff;
+      font-family: "Oswald", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .chat-avatar.station {
+      background: #080808;
+    }
+
+    .chat-avatar.station img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .chat-message-copy {
+      min-width: 0;
+    }
+
+    .chat-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--blue);
+      font-size: 0.71rem;
+      font-weight: 800;
+    }
+
+    .chat-user.alt {
+      color: var(--orange);
+    }
+
+    .chat-verified {
+      color: #8b7bff;
+      font-size: 0.64rem;
+    }
+
+    .chat-message-text {
+      margin: 3px 0 0;
+      overflow-wrap: anywhere;
+      color: #e2dfda;
+      font-size: 0.68rem;
+      line-height: 1.45;
+    }
+
+    .chat-message-time {
+      padding-top: 2px;
+      color: #8e9295;
+      font-size: 0.54rem;
+      white-space: nowrap;
+    }
+
+    .chat-gif {
+      display: block;
+      max-width: min(220px, 100%);
+      max-height: 165px;
+      margin-top: 6px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .chat-system-message {
+      margin: 7px 4px;
+      color: #777b7e;
+      font-size: 0.57rem;
+      text-align: center;
+    }
+
+    .chat-composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      padding: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(18, 20, 21, 0.92);
+    }
+
+    .chat-input {
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 8px;
+      outline: 0;
+      background: #17191b;
+      color: #f4f1ec;
+      font-size: 0.68rem;
+    }
+
+    .chat-input:focus {
+      border-color: rgba(87, 157, 255, 0.72);
+      box-shadow: 0 0 0 2px rgba(87, 157, 255, 0.12);
+    }
+
+    .chat-input::placeholder {
+      color: #797d80;
+    }
+
+    .chat-send {
+      min-width: 72px;
+      min-height: 42px;
+      padding: 8px 13px;
+      border: 1px solid rgba(87, 157, 255, 0.72);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #2e68d8, #1c4598);
+      color: #fff;
+      font-family: "Oswald", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .chat-send:disabled {
+      cursor: wait;
+      opacity: 0.55;
+    }
+
+    .chat-name-dialog[hidden] {
+      display: none;
+    }
+
+    .chat-name-dialog {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      padding: 20px;
+      background: rgba(2, 3, 3, 0.84);
+      backdrop-filter: blur(5px);
+      place-items: center;
+    }
+
+    .chat-name-card {
+      width: min(320px, 100%);
+      padding: 20px;
+      border: 1px solid rgba(255, 157, 39, 0.55);
+      border-radius: 12px;
+      background: #101214;
+      box-shadow: var(--shadow), 0 0 18px rgba(255, 138, 20, 0.15);
+    }
+
+    .chat-name-card h3 {
+      margin: 0;
+      font-family: "Oswald", sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .chat-name-card p {
+      margin: 7px 0 14px;
+      color: #999c9e;
+      font-size: 0.65rem;
+      line-height: 1.5;
+    }
+
+    .chat-name-form {
+      display: grid;
+      gap: 9px;
+    }
+
+    .chat-name-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .chat-name-actions button {
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 7px;
+      background: #191c1e;
+      color: #f0ede7;
+      font-size: 0.64rem;
+      cursor: pointer;
+    }
+
+    .chat-name-actions .primary {
+      border-color: rgba(87, 157, 255, 0.6);
+      background: #2456b0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
     .schedule-footer {
       display: flex;
       min-height: 48px;
@@ -293,9 +798,10 @@
       justify-content: center;
       gap: 8px;
       padding: 7px 18px;
-      border: 1px solid rgba(87, 157, 255, 0.23);
+      border: 1px solid rgba(255, 157, 39, 0.38);
       border-radius: 8px;
-      color: var(--blue-bright);
+      background: transparent;
+      color: var(--orange);
       font-size: 0.66rem;
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -310,8 +816,8 @@
     }
 
     .schedule-link:hover {
-      border-color: rgba(87, 157, 255, 0.72);
-      background: rgba(87, 157, 255, 0.07);
+      border-color: rgba(255, 191, 111, 0.78);
+      background: rgba(255, 157, 39, 0.08);
     }
 
     .live-row {
@@ -366,8 +872,7 @@
     }
 
     .station-copy {
-      padding: 0 18px 9px;
-      text-align: center;
+      display: none;
     }
 
     .station-copy h2 {
@@ -386,16 +891,16 @@
     }
 
     .now-playing {
-      display: grid;
-      grid-template-columns: minmax(165px, 47%) minmax(0, 1fr);
-      gap: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
       align-items: center;
-      padding: 10px 26px 8px;
+      padding: 0 28px 8px;
     }
 
     .artwork-frame {
       position: relative;
-      width: 100%;
+      width: min(270px, 57%);
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 9px;
@@ -427,6 +932,11 @@
       text-wrap: balance;
     }
 
+    .track-copy {
+      width: 100%;
+      text-align: center;
+    }
+
     .track-artist {
       margin: 8px 0 0;
       overflow-wrap: anywhere;
@@ -436,12 +946,7 @@
     }
 
     .track-note {
-      margin: 18px 0 0;
-      padding-top: 17px;
-      border-top: 1px solid rgba(255, 255, 255, 0.11);
-      color: var(--muted);
-      font-size: 0.74rem;
-      line-height: 1.55;
+      display: none;
     }
 
     .track-note strong {
@@ -455,7 +960,7 @@
 
     .custom-player {
       margin: auto 22px 0;
-      padding-top: 28px;
+      padding-top: 10px;
     }
 
     .custom-player audio {
@@ -464,7 +969,7 @@
 
     .transport-row {
       display: grid;
-      min-height: 103px;
+      min-height: 116px;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       justify-items: center;
@@ -495,8 +1000,8 @@
     .play-button {
       position: relative;
       display: grid;
-      width: 96px;
-      height: 96px;
+      width: 106px;
+      height: 106px;
       padding: 0;
       border: 3px solid #66a8ff;
       border-radius: 50%;
@@ -540,8 +1045,8 @@
     .player-state-icon {
       position: relative;
       z-index: 1;
-      width: 58px;
-      height: 58px;
+      width: 64px;
+      height: 64px;
       object-fit: contain;
       pointer-events: none;
     }
@@ -723,19 +1228,36 @@
     }
 
     .site-footer {
-      display: flex;
-      min-height: 133px;
-      flex-direction: column;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas:
+        "tagline tagline tagline"
+        ". social contact";
+      min-height: 126px;
       align-items: center;
-      justify-content: center;
       gap: 16px;
-      margin-top: 20px;
+      margin-top: 46px;
+      padding: 18px 24px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       background: linear-gradient(180deg, rgba(4, 4, 4, 0.45), rgba(4, 4, 4, 0.84));
     }
 
+    .site-footer::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      width: 100vw;
+      height: 2px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, rgba(255, 111, 9, 0.72), rgba(255, 146, 26, 0.42) 31%, rgba(72, 129, 255, 0.72) 50%, rgba(255, 146, 26, 0.42) 69%, rgba(255, 111, 9, 0.72));
+      box-shadow: 0 0 15px rgba(255, 116, 16, 0.28), 0 0 16px rgba(63, 120, 255, 0.18);
+    }
+
     .footer-tagline {
       display: flex;
+      grid-area: tagline;
       width: 100%;
       align-items: center;
       justify-content: center;
@@ -762,6 +1284,7 @@
 
     .social-links {
       display: flex;
+      grid-area: social;
       align-items: center;
       justify-content: center;
       gap: 20px;
@@ -784,16 +1307,19 @@
 
     .contact-link {
       display: inline-flex;
-      min-height: 30px;
+      grid-area: contact;
+      justify-self: end;
+      min-width: 170px;
+      min-height: 42px;
       align-items: center;
       justify-content: center;
       gap: 7px;
-      padding: 5px 13px;
+      padding: 8px 18px;
       border: 1px solid rgba(255, 139, 33, 0.64);
-      border-radius: 999px;
-      background: rgba(76, 27, 5, 0.42);
+      border-radius: 6px;
+      background: rgba(19, 12, 7, 0.72);
       color: #ffd8ac;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-decoration: none;
@@ -802,8 +1328,13 @@
     }
 
     .contact-link svg {
-      width: 15px;
-      height: 15px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-menu-button,
+    .mobile-nav {
+      display: none;
     }
 
     .contact-link:hover {
@@ -841,11 +1372,21 @@
       }
 
       .site-shell {
-        width: min(100% - 18px, 620px);
+        width: min(calc(100% - 48px), 740px);
       }
 
       .site-header {
-        min-height: 84px;
+        min-height: 96px;
+        padding-right: 58px;
+      }
+
+      .brand-lockup {
+        gap: 0;
+        padding: 10px 0;
+      }
+
+      .brand-tagline {
+        display: none;
       }
 
       .brand {
@@ -861,11 +1402,84 @@
         font-size: clamp(1.85rem, 10vw, 2.5rem);
       }
 
+      .mobile-menu-button {
+        position: absolute;
+        top: 50%;
+        right: 2px;
+        z-index: 12;
+        display: grid;
+        width: 48px;
+        height: 48px;
+        padding: 9px 6px;
+        border: 0;
+        background: transparent;
+        color: var(--orange);
+        cursor: pointer;
+        place-items: center;
+        transform: translateY(-50%);
+      }
+
+      .mobile-menu-button span {
+        display: block;
+        width: 34px;
+        height: 3px;
+        border-radius: 999px;
+        background: currentColor;
+        box-shadow: 0 0 8px rgba(255, 157, 39, 0.28);
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+      }
+
+      .mobile-nav {
+        position: absolute;
+        top: calc(100% - 9px);
+        right: 0;
+        z-index: 11;
+        width: min(230px, calc(100vw - 48px));
+        padding: 8px;
+        border: 1px solid var(--orange-line);
+        border-radius: 12px;
+        background: rgba(7, 7, 7, 0.98);
+        box-shadow: var(--shadow), 0 0 16px rgba(255, 145, 26, 0.24);
+      }
+
+      .mobile-nav.is-open {
+        display: grid;
+      }
+
+      .mobile-nav a {
+        padding: 11px 12px;
+        border-radius: 7px;
+        color: #f6f3ee;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .mobile-nav a:hover,
+      .mobile-nav a:focus-visible {
+        background: rgba(255, 157, 39, 0.1);
+        color: var(--orange);
+      }
+
       .studio-grid {
         display: flex;
         flex-direction: column;
         gap: 14px;
-        padding-top: 8px;
+        padding-top: 0;
       }
 
       .player-column {
@@ -890,16 +1504,81 @@
       }
 
       .schedule-panel {
-        height: 590px;
+        height: 420px;
       }
 
       .chat-panel {
-        height: 650px;
+        height: 560px;
       }
 
       .panel-header {
         min-height: 58px;
         padding: 12px 14px 10px;
+      }
+
+      .panel-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        color: #35d869;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+      }
+
+      .panel-status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px rgba(53, 216, 105, 0.72);
+      }
+
+      .schedule-header-link {
+        display: inline-flex;
+        margin-left: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--blue);
+        font-family: "Oswald", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .schedule-footer {
+        display: none;
+      }
+
+      .schedule-content,
+      .chat-shell {
+        margin-right: 8px;
+        margin-left: 8px;
+      }
+
+      .schedule-row {
+        min-height: 54px;
+        grid-template-columns: 76px minmax(0, 1fr);
+        padding: 7px 11px;
+      }
+
+      .chat-topbar {
+        min-height: 56px;
+      }
+
+      .chat-message {
+        grid-template-columns: 35px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 8px 2px;
+      }
+
+      .chat-avatar {
+        width: 35px;
+        height: 35px;
       }
 
       .panel-heading h2 {
@@ -924,9 +1603,18 @@
       }
 
       .now-playing {
-        grid-template-columns: 118px minmax(0, 1fr);
+        display: grid;
+        grid-template-columns: minmax(118px, 42%) minmax(0, 1fr);
         gap: 14px;
-        padding: 7px 14px 5px;
+        padding: 7px 28px 5px;
+      }
+
+      .artwork-frame {
+        width: 100%;
+      }
+
+      .track-copy {
+        text-align: left;
       }
 
       .track-title {
@@ -942,7 +1630,7 @@
       }
 
       .custom-player {
-        margin: 0 12px;
+        margin: 0 26px;
         padding-top: 22px;
       }
 
@@ -962,7 +1650,7 @@
 
       .music-platforms {
         gap: 6px;
-        margin: 12px 12px 14px;
+        margin: 12px 26px 18px;
       }
 
       .platform-link:not(.apple) {
@@ -970,8 +1658,18 @@
       }
 
       .site-footer {
+        display: flex;
         min-height: 120px;
+        flex-direction: column;
+        justify-content: center;
         margin-top: 14px;
+        gap: 18px;
+        padding: 20px 12px;
+      }
+
+      .contact-link {
+        justify-self: auto;
+        width: min(310px, 82%);
       }
 
       .footer-tagline {
@@ -986,6 +1684,14 @@
     }
 
     @media (max-width: 390px) {
+      .site-shell {
+        width: min(calc(100% - 24px), 740px);
+      }
+
+      .site-header {
+        padding-right: 48px;
+      }
+
       .brand-name {
         font-size: 1.82rem;
       }
@@ -997,6 +1703,14 @@
 
       .now-playing {
         grid-template-columns: 102px minmax(0, 1fr);
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .custom-player,
+      .music-platforms {
+        margin-right: 12px;
+        margin-left: 12px;
       }
     }
 
@@ -1018,14 +1732,28 @@
 
   <div class="site-shell">
     <header class="site-header">
-      <div class="brand" aria-label="WTinyRadio home">
-        <img class="brand-mark" src="./512x512.png" alt="">
-        <p class="brand-name">WTinyRadio</p>
+      <div class="brand-lockup">
+        <div class="brand" aria-label="WTinyRadio home">
+          <img class="brand-mark" src="./wtinyradio-badge.png" alt="">
+          <p class="brand-name">WTinyRadio</p>
+        </div>
+        <p class="brand-tagline">The best radio station you've never heard before</p>
       </div>
+      <button id="menuToggle" class="mobile-menu-button" type="button" aria-label="Open site menu" aria-controls="mobileNav" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+      <nav id="mobileNav" class="mobile-nav" aria-label="Mobile site navigation">
+        <a href="#player">Live player</a>
+        <a href="#schedule">Weekly schedule</a>
+        <a href="#chat">Community chat</a>
+        <a href="#contact">Contact us</a>
+      </nav>
     </header>
 
     <main id="studio" class="studio-grid">
-      <section class="panel schedule-panel" aria-labelledby="schedule-title">
+      <section id="schedule" class="panel schedule-panel" aria-labelledby="schedule-title">
         <header class="panel-header">
           <span class="panel-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M6 2v3M18 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
@@ -1033,26 +1761,31 @@
           <div class="panel-heading">
             <h2 id="schedule-title">Weekly schedule</h2>
           </div>
+          <button class="schedule-header-link schedule-toggle" type="button">View full schedule</button>
         </header>
 
-        <div class="embed-wrap">
-          <iframe
-            src="https://app.radiocult.fm/embed/schedule/mixman/show-list?theme=dusk&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true"
-            title="WTinyRadio weekly schedule"
-            loading="eager">
-          </iframe>
+        <div class="schedule-content">
+          <div id="scheduleDays" class="schedule-days" role="tablist" aria-label="Choose a schedule day"></div>
+          <div class="schedule-date-bar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2v3M18 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
+            <strong id="scheduleDateLabel">Loading this week…</strong>
+            <span id="scheduleTimezone" class="schedule-timezone"></span>
+          </div>
+          <div id="scheduleList" class="schedule-list" aria-live="polite">
+            <div class="panel-state">Loading the live schedule…</div>
+          </div>
         </div>
 
         <div class="schedule-footer">
-          <a class="schedule-link" href="https://app.radiocult.fm/embed/schedule/mixman/show-list?theme=dusk&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true" target="_blank" rel="noopener noreferrer">
+          <button class="schedule-link schedule-toggle" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
             <span>View full schedule</span>
-          </a>
+          </button>
         </div>
       </section>
 
       <div class="player-column">
-        <section class="panel player-panel" aria-labelledby="trackTitle">
+        <section id="player" class="panel player-panel" aria-labelledby="trackTitle">
           <div class="live-row" aria-label="WTinyRadio is live">
             <span class="live-wave" aria-hidden="true"></span>
             <span class="live-badge"><span class="live-dot" aria-hidden="true"></span>Live</span>
@@ -1122,7 +1855,7 @@
         </section>
       </div>
 
-      <section class="panel chat-panel" aria-labelledby="chat-title">
+      <section id="chat" class="panel chat-panel" aria-labelledby="chat-title">
         <header class="panel-header">
           <span class="panel-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 18l-1 4 5-3h9a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v9a3 3 0 0 0 2 3ZM8 9h8M8 13h5"/></svg>
@@ -1130,29 +1863,63 @@
           <div class="panel-heading">
             <h2 id="chat-title">Community chat</h2>
           </div>
+          <span class="panel-status">Live chat</span>
         </header>
 
-        <div class="embed-wrap chat-embed">
-          <iframe
-            src="https://app.radiocult.fm/embed/chat/mixman?theme=midnight&amp;primaryColor=%23579DFF&amp;corners=rounded&amp;removeRcBranding=true"
-            title="WTinyRadio live community chat"
-            loading="eager">
-          </iframe>
+        <div class="chat-shell">
+          <div class="chat-topbar">
+            <span class="chat-station-avatar" aria-hidden="true"><img src="./wtinyradio-badge.png" alt=""></span>
+            <div class="chat-station-copy">
+              <strong>Wtinyradio.com</strong>
+              <span id="chatAudience" class="chat-live-count">Connecting…</span>
+            </div>
+            <button id="chatNameButton" class="chat-name-button" type="button">Choose name</button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-label="WTinyRadio community messages">
+            <div class="panel-state">Loading the live conversation…</div>
+          </div>
+
+          <form id="chatForm" class="chat-composer">
+            <label class="sr-only" for="chatInput">Chat message</label>
+            <input id="chatInput" class="chat-input" name="message" maxlength="1000" autocomplete="off" placeholder="Choose a display name to join…">
+            <button id="chatSend" class="chat-send" type="submit">Send</button>
+          </form>
+
+          <p id="chatStatus" class="sr-only" role="status"></p>
+
+          <div id="chatNameDialog" class="chat-name-dialog" hidden>
+            <div class="chat-name-card" role="dialog" aria-modal="true" aria-labelledby="chatNameTitle">
+              <h3 id="chatNameTitle">Join the WTinyRadio chat</h3>
+              <p>Pick the display name other listeners will see. You can change it later.</p>
+              <form id="chatNameForm" class="chat-name-form">
+                <label class="sr-only" for="chatNameInput">Display name</label>
+                <input id="chatNameInput" class="chat-input" name="displayName" minlength="2" maxlength="28" autocomplete="nickname" placeholder="Display name" required>
+                <div class="chat-name-actions">
+                  <button id="chatNameCancel" type="button">Cancel</button>
+                  <button class="primary" type="submit">Join chat</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
+    <footer id="contact" class="site-footer">
       <div class="footer-tagline">The best radio station you've never heard before</div>
       <nav class="social-links" aria-label="WTinyRadio social links">
         <a class="social-link" href="https://www.facebook.com/Wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Facebook">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1Z"/></svg>
         </a>
         <a class="social-link" href="https://x.com/wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on X">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l14 16M19 4 5 20"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6.1c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.3 1.7-2.2-.8.5-1.6.8-2.6 1A4 4 0 0 0 11 9.1a11.4 11.4 0 0 1-8.3-4.2A4 4 0 0 0 4 10.3c-.6 0-1.2-.2-1.8-.5 0 2 1.5 3.7 3.4 4.1-.4.1-.7.2-1.1.2-.3 0-.5 0-.8-.1.5 1.7 2.1 2.9 3.9 2.9A8.1 8.1 0 0 1 2.5 19H1.5a11.4 11.4 0 0 0 6.2 1.8c7.4 0 11.5-6.2 11.5-11.5v-.5c.8-.6 1.4-1.3 1.9-2.1Z"/></svg>
         </a>
         <a class="social-link" href="https://www.instagram.com/cugaz" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Instagram">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        </a>
+        <a class="social-link" href="https://open.spotify.com/search/WTinyRadio" target="_blank" rel="noopener noreferrer" aria-label="Find WTinyRadio on Spotify">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.3-1 7.4-.7 10 .7M8.2 12.3c2.7-.8 6.2-.5 8.7.7M8.9 15.2c2.2-.6 4.9-.4 7 .6"/></svg>
         </a>
       </nav>
       <a class="contact-link" href="mailto:support@wtinyradio.com">
@@ -1166,7 +1933,9 @@
     const STATION_ID = "mixman";
     const FALLBACK_ARTWORK = "./512x512.png";
     const STREAM_URL = "https://mixman.radiocult.fm/stream";
-    const liveEndpoint = `https://api.radiocult.fm/api/station/${STATION_ID}/schedule/live`;
+    const DATA_API_BASE = "https://radio-api.wtinyradio.com";
+    const liveEndpoint = `${DATA_API_BASE}/live`;
+    const CHAT_SOCKET_URL = `wss://api.radiocult.fm/socket.io/?stationId=${encodeURIComponent(STATION_ID)}&isEmbedded=true&EIO=4&transport=websocket`;
 
     const titleElement = document.getElementById("trackTitle");
     const artistElement = document.getElementById("trackArtist");
@@ -1179,6 +1948,25 @@
     const spotifyLink = document.getElementById("spotifyLink");
     const appleMusicLink = document.getElementById("appleMusicLink");
     const youtubeMusicLink = document.getElementById("youtubeMusicLink");
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileNav = document.getElementById("mobileNav");
+    const schedulePanel = document.getElementById("schedule");
+    const scheduleDays = document.getElementById("scheduleDays");
+    const scheduleDateLabel = document.getElementById("scheduleDateLabel");
+    const scheduleTimezone = document.getElementById("scheduleTimezone");
+    const scheduleList = document.getElementById("scheduleList");
+    const scheduleToggles = document.querySelectorAll(".schedule-toggle");
+    const chatMessagesElement = document.getElementById("chatMessages");
+    const chatAudience = document.getElementById("chatAudience");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatSend = document.getElementById("chatSend");
+    const chatStatus = document.getElementById("chatStatus");
+    const chatNameButton = document.getElementById("chatNameButton");
+    const chatNameDialog = document.getElementById("chatNameDialog");
+    const chatNameForm = document.getElementById("chatNameForm");
+    const chatNameInput = document.getElementById("chatNameInput");
+    const chatNameCancel = document.getElementById("chatNameCancel");
 
     function firstValue(...values) {
       return values.find((value) => typeof value === "string" && value.trim())?.trim() || "";
@@ -1337,6 +2125,576 @@
       radioAudio.muted = radioAudio.volume === 0;
       updateVolumeDisplay();
     });
+
+    function closeMobileMenu() {
+      mobileNav.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open site menu");
+    }
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      mobileNav.classList.toggle("is-open", !isOpen);
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Open site menu" : "Close site menu");
+    });
+
+    mobileNav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) closeMobileMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMobileMenu();
+    });
+
+    const scheduleLocale = navigator.language || "en-US";
+    const stationTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Phoenix";
+    let weeklySchedule = [];
+    let scheduleWeekView = false;
+
+    function getScheduleWeekStart(date = new Date()) {
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+      const daysSinceMonday = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - daysSinceMonday);
+      return start;
+    }
+
+    const scheduleWeekStart = getScheduleWeekStart();
+    let selectedScheduleDay = Math.max(0, Math.min(6, (new Date().getDay() + 6) % 7));
+
+    function scheduleDay(index) {
+      const date = new Date(scheduleWeekStart);
+      date.setDate(date.getDate() + index);
+      return date;
+    }
+
+    function formatScheduleTime(date) {
+      return new Intl.DateTimeFormat(scheduleLocale, {
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+
+    function descriptionText(value) {
+      if (!value) return "";
+      if (typeof value === "string") return value.trim();
+      if (Array.isArray(value)) return value.map(descriptionText).filter(Boolean).join(" ").trim();
+      if (typeof value === "object") {
+        return [value.text, descriptionText(value.content)].filter(Boolean).join(" ").trim();
+      }
+      return "";
+    }
+
+    function eventsForScheduleDay(date) {
+      const dayStart = new Date(date);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(dayStart);
+      dayEnd.setDate(dayEnd.getDate() + 1);
+
+      return weeklySchedule
+        .filter((event) => {
+          const eventStart = new Date(event.startDateUtc || event.start);
+          const eventEnd = new Date(event.endDateUtc || event.end);
+          return eventStart < dayEnd && eventEnd > dayStart;
+        })
+        .sort((first, second) => new Date(first.startDateUtc || first.start) - new Date(second.startDateUtc || second.start));
+    }
+
+    function makeScheduleRow(event, date) {
+      const row = document.createElement("article");
+      row.className = "schedule-row";
+
+      const dayStart = new Date(date);
+      dayStart.setHours(0, 0, 0, 0);
+      const eventStart = new Date(event.startDateUtc || event.start);
+      const displayStart = eventStart < dayStart ? dayStart : eventStart;
+
+      const time = document.createElement("time");
+      time.className = "schedule-time";
+      time.dateTime = eventStart.toISOString();
+      time.textContent = formatScheduleTime(displayStart);
+
+      const show = document.createElement("div");
+      show.className = "schedule-show";
+      const title = document.createElement("strong");
+      title.textContent = event.title || "WTinyRadio";
+
+      const details = document.createElement("span");
+      const artistNames = Array.isArray(event.artists)
+        ? event.artists.map((artist) => artist?.name || artist?.slug).filter(Boolean)
+        : [];
+      const description = descriptionText(event.description);
+      details.textContent = artistNames.length ? `w/ ${artistNames.join(", ")}` : description || "Live on WTinyRadio";
+
+      show.append(title, details);
+      row.append(time, show);
+      return row;
+    }
+
+    function updateScheduleToggleLabels() {
+      scheduleToggles.forEach((toggle) => {
+        const label = scheduleWeekView ? "View daily schedule" : "View full schedule";
+        const text = toggle.querySelector("span");
+        if (text) text.textContent = label;
+        else toggle.textContent = label;
+        toggle.setAttribute("aria-pressed", String(scheduleWeekView));
+      });
+    }
+
+    function renderScheduleTabs() {
+      scheduleDays.replaceChildren();
+      for (let index = 0; index < 7; index += 1) {
+        const date = scheduleDay(index);
+        const button = document.createElement("button");
+        button.className = "schedule-day-tab";
+        button.type = "button";
+        button.role = "tab";
+        button.textContent = new Intl.DateTimeFormat(scheduleLocale, { weekday: "short" }).format(date);
+        button.setAttribute("aria-selected", String(!scheduleWeekView && selectedScheduleDay === index));
+        button.setAttribute("aria-label", new Intl.DateTimeFormat(scheduleLocale, {
+          weekday: "long",
+          month: "long",
+          day: "numeric"
+        }).format(date));
+        button.addEventListener("click", () => {
+          selectedScheduleDay = index;
+          scheduleWeekView = false;
+          renderSchedule();
+        });
+        scheduleDays.append(button);
+      }
+    }
+
+    function appendEmptyScheduleState(container, text) {
+      const empty = document.createElement("div");
+      empty.className = "panel-state";
+      empty.textContent = text;
+      container.append(empty);
+    }
+
+    function renderSchedule() {
+      renderScheduleTabs();
+      updateScheduleToggleLabels();
+      scheduleList.replaceChildren();
+      schedulePanel.classList.toggle("is-week-view", scheduleWeekView);
+
+      if (scheduleWeekView) {
+        scheduleDateLabel.textContent = new Intl.DateTimeFormat(scheduleLocale, {
+          month: "long",
+          day: "numeric"
+        }).format(scheduleWeekStart) + " - " + new Intl.DateTimeFormat(scheduleLocale, {
+          month: "long",
+          day: "numeric"
+        }).format(scheduleDay(6));
+
+        let numberOfEvents = 0;
+        for (let index = 0; index < 7; index += 1) {
+          const date = scheduleDay(index);
+          const events = eventsForScheduleDay(date);
+          if (!events.length) continue;
+          const group = document.createElement("div");
+          group.className = "schedule-group-label";
+          group.textContent = new Intl.DateTimeFormat(scheduleLocale, {
+            weekday: "long",
+            month: "short",
+            day: "numeric"
+          }).format(date);
+          scheduleList.append(group);
+          events.forEach((event) => scheduleList.append(makeScheduleRow(event, date)));
+          numberOfEvents += events.length;
+        }
+        if (!numberOfEvents) appendEmptyScheduleState(scheduleList, "No shows are scheduled for this week yet.");
+        return;
+      }
+
+      const date = scheduleDay(selectedScheduleDay);
+      scheduleDateLabel.textContent = new Intl.DateTimeFormat(scheduleLocale, {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      }).format(date);
+      const events = eventsForScheduleDay(date);
+      if (!events.length) {
+        appendEmptyScheduleState(scheduleList, "No shows are scheduled for this day yet.");
+        return;
+      }
+      events.forEach((event) => scheduleList.append(makeScheduleRow(event, date)));
+    }
+
+    async function loadWeeklySchedule() {
+      scheduleTimezone.textContent = stationTimezone.replaceAll("_", " ");
+      const rangeEnd = new Date(scheduleWeekStart);
+      rangeEnd.setDate(rangeEnd.getDate() + 7);
+      const requestUrl = new URL(`${DATA_API_BASE}/schedule`);
+      requestUrl.searchParams.set("start", scheduleWeekStart.toISOString());
+      requestUrl.searchParams.set("end", rangeEnd.toISOString());
+      requestUrl.searchParams.set("timezone", stationTimezone);
+
+      try {
+        const response = await fetch(requestUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Schedule returned ${response.status}`);
+        const data = await response.json();
+        weeklySchedule = Array.isArray(data.schedules) ? data.schedules : [];
+        renderSchedule();
+      } catch (error) {
+        scheduleList.replaceChildren();
+        appendEmptyScheduleState(scheduleList, "The live schedule is reconnecting. Please check back in a moment.");
+        console.info("The live schedule could not be loaded.", error);
+      }
+    }
+
+    scheduleToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        scheduleWeekView = !scheduleWeekView;
+        renderSchedule();
+      });
+    });
+
+    const chatMessageStore = new Map();
+    let chatSocket;
+    let chatSocketReady = false;
+    let chatReconnectTimer;
+    let chatHasRendered = false;
+    let chatUser = null;
+
+    try {
+      chatUser = JSON.parse(localStorage.getItem("wtinyradio-chat-user") || "null");
+    } catch (error) {
+      localStorage.removeItem("wtinyradio-chat-user");
+    }
+
+    function updateChatIdentity() {
+      chatNameButton.textContent = chatUser?.displayName || "Choose name";
+      chatInput.placeholder = chatUser ? `Message as ${chatUser.displayName}…` : "Choose a display name to join…";
+    }
+
+    function chatCreatedDate(message) {
+      const raw = message?.createdAt;
+      if (typeof raw === "number") return new Date(raw < 1e12 ? raw * 1000 : raw);
+      const parsed = new Date(raw || 0);
+      return Number.isNaN(parsed.getTime()) ? new Date(0) : parsed;
+    }
+
+    function chatInitials(name) {
+      const parts = String(name || "Listener").trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return "?";
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return `${parts[0][0]}${parts.at(-1)[0]}`.toUpperCase();
+    }
+
+    function alternateChatColor(name) {
+      return Array.from(String(name || "")).reduce((total, character) => total + character.charCodeAt(0), 0) % 2 === 1;
+    }
+
+    function safeGifUrl(message) {
+      const media = message?.content?.media;
+      if (!media) return "";
+      const id = String(media.id || "").replace(/[^a-zA-Z0-9_-]/g, "");
+      if (id) return `https://media.giphy.com/media/${id}/giphy.gif`;
+      try {
+        const url = new URL(media.url);
+        return url.protocol === "https:" && url.hostname.endsWith("giphy.com") ? url.href : "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function renderChatMessages() {
+      const wasNearBottom = chatMessagesElement.scrollHeight - chatMessagesElement.scrollTop - chatMessagesElement.clientHeight < 90;
+      const messages = Array.from(chatMessageStore.values())
+        .filter((message) => !message.flagged)
+        .sort((first, second) => chatCreatedDate(first) - chatCreatedDate(second))
+        .slice(-80);
+
+      chatMessagesElement.replaceChildren();
+      if (!messages.length) {
+        const empty = document.createElement("div");
+        empty.className = "panel-state";
+        empty.textContent = "The conversation is open. Be the first to say hello.";
+        chatMessagesElement.append(empty);
+      }
+
+      messages.forEach((message) => {
+        if (message.type === "user_joined" || message.type === "user_name_change") {
+          const systemMessage = document.createElement("p");
+          systemMessage.className = "chat-system-message";
+          systemMessage.textContent = message.content?.text || "A listener joined the chat.";
+          chatMessagesElement.append(systemMessage);
+          return;
+        }
+
+        const row = document.createElement("article");
+        row.className = "chat-message";
+        const isStation = Boolean(message.isStationMessage || message.userId === STATION_ID);
+
+        const avatar = document.createElement("span");
+        avatar.className = `chat-avatar${isStation ? " station" : ""}`;
+        avatar.setAttribute("aria-hidden", "true");
+        if (isStation) {
+          const image = document.createElement("img");
+          image.src = "./wtinyradio-badge.png";
+          image.alt = "";
+          avatar.append(image);
+        } else {
+          avatar.textContent = chatInitials(message.displayName);
+        }
+
+        const copy = document.createElement("div");
+        copy.className = "chat-message-copy";
+        const user = document.createElement("span");
+        user.className = `chat-user${alternateChatColor(message.displayName) ? " alt" : ""}`;
+        user.textContent = message.displayName || "Listener";
+        if (isStation) {
+          const verified = document.createElement("span");
+          verified.className = "chat-verified";
+          verified.textContent = "●";
+          verified.title = "Verified station message";
+          user.append(verified);
+        }
+        copy.append(user);
+
+        if (message.type === "gif") {
+          const gifUrl = safeGifUrl(message);
+          if (gifUrl) {
+            const image = document.createElement("img");
+            image.className = "chat-gif";
+            image.src = gifUrl;
+            image.alt = `${message.displayName || "A listener"} shared a GIF`;
+            image.loading = "lazy";
+            copy.append(image);
+          }
+        } else {
+          const text = document.createElement("p");
+          text.className = "chat-message-text";
+          text.textContent = message.content?.text || "";
+          if (message.type === "heart_reaction") text.style.fontSize = "1.45rem";
+          copy.append(text);
+        }
+
+        const time = document.createElement("time");
+        const created = chatCreatedDate(message);
+        time.className = "chat-message-time";
+        time.dateTime = created.toISOString();
+        time.textContent = new Intl.DateTimeFormat(scheduleLocale, { hour: "numeric", minute: "2-digit" }).format(created);
+
+        row.append(avatar, copy, time);
+        chatMessagesElement.append(row);
+      });
+
+      if (!chatHasRendered || wasNearBottom) chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+      chatHasRendered = true;
+    }
+
+    function mergeChatMessages(messages) {
+      const list = Array.isArray(messages) ? messages : [messages];
+      let changed = false;
+      list.forEach((message) => {
+        if (!message || message.station !== STATION_ID || !message.id) return;
+        const previous = chatMessageStore.get(message.id);
+        if (JSON.stringify(previous) !== JSON.stringify(message)) {
+          chatMessageStore.set(message.id, message);
+          changed = true;
+        }
+      });
+      if (changed) renderChatMessages();
+    }
+
+    async function loadChatHistory() {
+      try {
+        const response = await fetch(`${DATA_API_BASE}/chat`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Chat returned ${response.status}`);
+        const data = await response.json();
+        mergeChatMessages(data.messages || []);
+        if (!chatHasRendered) renderChatMessages();
+      } catch (error) {
+        if (!chatHasRendered) {
+          chatMessagesElement.replaceChildren();
+          const state = document.createElement("div");
+          state.className = "panel-state";
+          state.textContent = "The live chat is reconnecting. Please try again in a moment.";
+          chatMessagesElement.append(state);
+        }
+        console.info("Chat history could not be loaded.", error);
+      }
+    }
+
+    function parseChatSocketEvent(packet) {
+      if (packet === "2") {
+        if (chatSocket?.readyState === WebSocket.OPEN) chatSocket.send("3");
+        return;
+      }
+      if (packet.startsWith("0")) {
+        if (chatSocket?.readyState === WebSocket.OPEN) chatSocket.send("40");
+        return;
+      }
+      if (packet.startsWith("40")) {
+        chatSocketReady = true;
+        chatAudience.textContent = "Live chat";
+        return;
+      }
+      if (!packet.startsWith("42")) return;
+
+      try {
+        const [eventName, payload] = JSON.parse(packet.slice(2));
+        if (eventName === "message") mergeChatMessages(payload?.messages || payload);
+        if (eventName === "participants-list-update") {
+          const participants = payload?.participants;
+          const count = Array.isArray(participants) ? participants.length : Number(participants) || 0;
+          chatAudience.textContent = count ? `${count} online` : "Live chat";
+        }
+      } catch (error) {
+        console.info("A chat update could not be read.", error);
+      }
+    }
+
+    function connectChatSocket() {
+      if (chatSocket && (chatSocket.readyState === WebSocket.OPEN || chatSocket.readyState === WebSocket.CONNECTING)) return;
+      window.clearTimeout(chatReconnectTimer);
+      chatSocketReady = false;
+      chatAudience.textContent = "Connecting…";
+      chatSocket = new WebSocket(CHAT_SOCKET_URL);
+      chatSocket.addEventListener("message", (event) => parseChatSocketEvent(String(event.data)));
+      chatSocket.addEventListener("close", () => {
+        chatSocketReady = false;
+        chatAudience.textContent = "Reconnecting…";
+        chatReconnectTimer = window.setTimeout(connectChatSocket, 5000);
+      });
+      chatSocket.addEventListener("error", () => {
+        chatAudience.textContent = "Reconnecting…";
+      });
+    }
+
+    function waitForChatSocket(timeout = 4500) {
+      if (chatSocketReady) return Promise.resolve(true);
+      connectChatSocket();
+      return new Promise((resolve) => {
+        const started = Date.now();
+        const interval = window.setInterval(() => {
+          if (chatSocketReady || Date.now() - started >= timeout) {
+            window.clearInterval(interval);
+            resolve(chatSocketReady);
+          }
+        }, 100);
+      });
+    }
+
+    function createChatMessage(type, content, user = chatUser) {
+      return {
+        station: STATION_ID,
+        id: typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        displayName: user.displayName,
+        userId: user.userId,
+        createdAt: Math.floor(Date.now() / 1000),
+        timestampId: "",
+        flagged: false,
+        type,
+        content
+      };
+    }
+
+    function sendChatSocketMessage(message) {
+      if (!chatSocketReady || chatSocket?.readyState !== WebSocket.OPEN) return false;
+      chatSocket.send(`42${JSON.stringify(["message", message])}`);
+      mergeChatMessages(message);
+      return true;
+    }
+
+    function openChatNameDialog() {
+      chatNameInput.value = chatUser?.displayName || "";
+      chatNameDialog.hidden = false;
+      window.setTimeout(() => chatNameInput.focus(), 0);
+    }
+
+    function closeChatNameDialog() {
+      chatNameDialog.hidden = true;
+    }
+
+    chatNameButton.addEventListener("click", openChatNameDialog);
+    chatNameCancel.addEventListener("click", closeChatNameDialog);
+    chatInput.addEventListener("focus", () => {
+      if (!chatUser) openChatNameDialog();
+    });
+
+    chatNameForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const displayName = chatNameInput.value.trim();
+      if (displayName.length < 2) return;
+
+      const previousUser = chatUser;
+      const submitButton = chatNameForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      chatStatus.textContent = "Saving your display name…";
+
+      try {
+        const requestUrl = previousUser
+          ? `${DATA_API_BASE}/chat/user/${encodeURIComponent(previousUser.userId)}/display-name`
+          : `${DATA_API_BASE}/chat/user`;
+        const response = await fetch(requestUrl, {
+          method: previousUser ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(previousUser ? { newDisplayName: displayName } : { displayName })
+        });
+        if (!response.ok) throw new Error(`Display name returned ${response.status}`);
+        const data = await response.json();
+        const savedUser = data.user || data.payload?.user;
+        chatUser = {
+          userId: savedUser?.id || previousUser?.userId,
+          displayName: savedUser?.displayName || displayName
+        };
+        if (!chatUser.userId) throw new Error("RadioCult did not return a chat user.");
+        localStorage.setItem("wtinyradio-chat-user", JSON.stringify(chatUser));
+        updateChatIdentity();
+        closeChatNameDialog();
+        chatInput.focus();
+        chatStatus.textContent = `Chatting as ${chatUser.displayName}`;
+
+        if (await waitForChatSocket()) {
+          const text = previousUser
+            ? `${previousUser.displayName} changed their name to ${chatUser.displayName}`
+            : `${chatUser.displayName} joined the chat`;
+          sendChatSocketMessage(createChatMessage(previousUser ? "user_name_change" : "user_joined", { text }));
+        }
+      } catch (error) {
+        chatStatus.textContent = "Your display name could not be saved. Please try again.";
+        console.info("Chat identity could not be saved.", error);
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    chatForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!chatUser) {
+        openChatNameDialog();
+        return;
+      }
+
+      const text = chatInput.value.trim();
+      if (!text) return;
+      chatSend.disabled = true;
+      const connected = await waitForChatSocket();
+      if (!connected) {
+        chatStatus.textContent = "The chat is reconnecting. Please try sending again.";
+        chatSend.disabled = false;
+        return;
+      }
+
+      const message = createChatMessage("message", { text });
+      if (sendChatSocketMessage(message)) {
+        chatInput.value = "";
+        chatStatus.textContent = "Message sent";
+      }
+      chatSend.disabled = false;
+      chatInput.focus();
+    });
+
+    updateChatIdentity();
+    renderScheduleTabs();
+    loadWeeklySchedule();
+    loadChatHistory();
+    connectChatSocket();
+    window.setInterval(loadChatHistory, 15000);
 
     radioAudio.volume = 0.8;
     updateVolumeDisplay();
