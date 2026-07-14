@@ -847,7 +847,1329 @@
       padding: 7px 17px;
       border: 2px solid var(--orange-hot);
       border-radius: 12px;
-      background: linear-gradient(180deg, rgba(12…10051 tokens truncated…te) {
+      background: linear-gradient(180deg, rgba(126, 30, 7, 0.68), rgba(39, 10, 4, 0.88));
+      color: #fff2e8;
+      box-shadow: 0 0 13px rgba(255, 75, 0, 0.55), inset 0 0 12px rgba(255, 74, 0, 0.15);
+      font-family: "Oswald", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ff5216;
+      box-shadow: 0 0 11px rgba(255, 78, 21, 0.95);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      50% { opacity: 0.55; transform: scale(0.82); }
+    }
+
+    .station-copy {
+      display: none;
+    }
+
+    .station-copy h2 {
+      margin: 0;
+      font-family: "Oswald", sans-serif;
+      font-size: 1.38rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .station-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .now-playing {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      align-items: center;
+      padding: 0 28px 8px;
+    }
+
+    .artwork-frame {
+      position: relative;
+      width: min(270px, 57%);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9px;
+      aspect-ratio: 1;
+      background: #151515;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.46);
+    }
+
+    .artwork {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+      transition: opacity 0.24s ease;
+    }
+
+    .artwork.is-loading {
+      opacity: 0.42;
+    }
+
+    .track-title {
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-family: "Oswald", sans-serif;
+      font-size: clamp(1.45rem, 2.15vw, 2rem);
+      font-weight: 500;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+
+    .track-copy {
+      width: 100%;
+      text-align: center;
+    }
+
+    .track-artist {
+      margin: 8px 0 0;
+      overflow-wrap: anywhere;
+      color: var(--blue);
+      font-size: clamp(1rem, 1.4vw, 1.2rem);
+      font-weight: 700;
+    }
+
+    .track-note {
+      display: none;
+    }
+
+    .track-note strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--blue);
+      font-size: 0.67rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .custom-player {
+      margin: auto 22px 0;
+      padding-top: 10px;
+    }
+
+    .custom-player audio {
+      display: none;
+    }
+
+    .transport-row {
+      display: grid;
+      min-height: 116px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .transport-button {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #dddcd7;
+      place-items: center;
+    }
+
+    .transport-button svg {
+      width: 27px;
+      height: 27px;
+      fill: currentColor;
+    }
+
+    .transport-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+
+    .play-button {
+      position: relative;
+      display: grid;
+      width: 106px;
+      height: 106px;
+      padding: 0;
+      border: 3px solid #66a8ff;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(52, 100, 183, 0.6), rgba(9, 24, 55, 0.95) 62%),
+        #0c1831;
+      color: #fffdf7;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.4),
+        0 0 24px rgba(46, 116, 255, 0.78),
+        inset 0 0 24px rgba(92, 155, 255, 0.3);
+      cursor: pointer;
+      place-items: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .play-button::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      pointer-events: none;
+      border: 1px solid rgba(176, 211, 255, 0.34);
+      border-radius: 50%;
+    }
+
+    .play-button:hover {
+      border-color: #9bc8ff;
+      box-shadow:
+        0 0 0 2px rgba(48, 111, 255, 0.5),
+        0 0 31px rgba(46, 116, 255, 0.92),
+        inset 0 0 26px rgba(92, 155, 255, 0.38);
+      transform: scale(1.03);
+    }
+
+    .play-button:disabled {
+      cursor: wait;
+      opacity: 0.78;
+      transform: none;
+    }
+
+    .player-state-icon {
+      position: relative;
+      z-index: 1;
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .play-button .play-icon {
+      margin-left: 4px;
+    }
+
+    .play-button .pause-icon,
+    .play-button.is-playing .play-icon {
+      display: none;
+    }
+
+    .play-button.is-playing .pause-icon {
+      display: block;
+    }
+
+    .player-status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .volume-row {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) 32px;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .volume-button,
+    .volume-high {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #e5e4df;
+      place-items: center;
+    }
+
+    .volume-button {
+      cursor: pointer;
+    }
+
+    .volume-button:hover {
+      color: var(--blue-bright);
+    }
+
+    .volume-button svg,
+    .volume-high svg {
+      width: 23px;
+      height: 23px;
+      fill: currentColor;
+    }
+
+    .volume-button .muted-icon,
+    .volume-button.is-muted .volume-icon {
+      display: none;
+    }
+
+    .volume-button.is-muted .muted-icon {
+      display: block;
+    }
+
+    .volume-control {
+      width: 100%;
+      height: 5px;
+      appearance: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue) 0 var(--volume, 80%), #666 0 100%);
+      cursor: pointer;
+    }
+
+    .volume-control::-webkit-slider-thumb {
+      width: 17px;
+      height: 17px;
+      appearance: none;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
+    }
+
+    .volume-control::-moz-range-thumb {
+      width: 17px;
+      height: 17px;
+      border: 0;
+      border-radius: 50%;
+      background: #3f7cff;
+      box-shadow: 0 0 9px rgba(63, 124, 255, 0.72);
+    }
+
+    .music-platforms {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      align-items: center;
+      margin: 14px 22px 18px;
+    }
+
+    .platform-link {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      aspect-ratio: 140.62 / 41;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      background: #090a0b;
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .platform-link img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      flex: 0 1 auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .platform-link.apple {
+      padding: 0;
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .platform-link.apple img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .platform-link.spotify img {
+      width: 78%;
+    }
+
+    .platform-link.youtube img {
+      width: 76%;
+    }
+
+    .platform-link:hover {
+      border-color: rgba(255, 199, 124, 0.72);
+      background: #121416;
+    }
+
+    .platform-link.apple:hover {
+      border-color: transparent;
+      background: transparent;
+      filter: brightness(1.08);
+    }
+
+    .platform-link[aria-disabled="true"] {
+      cursor: default;
+      opacity: 0.46;
+      pointer-events: none;
+    }
+
+    .platform-link:focus-visible,
+    .contact-link:focus-visible,
+    .schedule-link:focus-visible,
+    .social-link:focus-visible,
+    .play-button:focus-visible,
+    .volume-button:focus-visible,
+    .volume-control:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+    }
+
+    .site-footer {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas:
+        "tagline tagline tagline"
+        ". social contact";
+      min-height: 126px;
+      align-items: center;
+      gap: 16px;
+      margin-top: 46px;
+      padding: 18px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, rgba(4, 4, 4, 0.45), rgba(4, 4, 4, 0.84));
+    }
+
+    .site-footer::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      width: 100vw;
+      height: 2px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, rgba(255, 111, 9, 0.72), rgba(255, 146, 26, 0.42) 31%, rgba(72, 129, 255, 0.72) 50%, rgba(255, 146, 26, 0.42) 69%, rgba(255, 111, 9, 0.72));
+      box-shadow: 0 0 15px rgba(255, 116, 16, 0.28), 0 0 16px rgba(63, 120, 255, 0.18);
+    }
+
+    .footer-tagline {
+      display: flex;
+      grid-area: tagline;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      color: #d8d0c7;
+      font-family: "Oswald", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .footer-tagline::before,
+    .footer-tagline::after {
+      content: "";
+      width: min(18vw, 250px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 156, 48, 0.45));
+    }
+
+    .footer-tagline::after {
+      transform: rotate(180deg);
+    }
+
+    .social-links {
+      display: flex;
+      grid-area: social;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-link {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      color: var(--blue);
+      text-decoration: none;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-link:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .contact-link {
+      display: inline-flex;
+      grid-area: contact;
+      justify-self: end;
+      min-width: 170px;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 18px;
+      border: 1px solid rgba(255, 139, 33, 0.64);
+      border-radius: 6px;
+      background: rgba(19, 12, 7, 0.72);
+      color: #ffd8ac;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .contact-link svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-menu-button,
+    .mobile-nav {
+      display: none;
+    }
+
+    .contact-link:hover {
+      border-color: var(--orange);
+      background: rgba(129, 43, 4, 0.56);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 1180px) {
+      .site-shell {
+        width: min(1080px, calc(100% - 28px));
+      }
+
+      .studio-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+          "player player"
+          "schedule chat";
+      }
+
+      .player-column {
+        width: min(650px, 100%);
+        margin: 0 auto;
+      }
+
+      .schedule-panel,
+      .chat-panel {
+        height: 660px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        background-attachment: scroll;
+      }
+
+      .site-shell {
+        width: min(calc(100% - 48px), 740px);
+      }
+
+      .site-header {
+        min-height: 96px;
+        padding-right: 58px;
+      }
+
+      .brand-lockup {
+        gap: 0;
+        padding: 10px 0;
+      }
+
+      .brand-tagline {
+        display: none;
+      }
+
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-mark {
+        width: 48px;
+        height: 48px;
+      }
+
+      .brand-name {
+        font-size: clamp(1.85rem, 10vw, 2.5rem);
+      }
+
+      .mobile-menu-button {
+        position: absolute;
+        top: 50%;
+        right: 2px;
+        z-index: 12;
+        display: grid;
+        width: 48px;
+        height: 48px;
+        padding: 9px 6px;
+        border: 0;
+        background: transparent;
+        color: var(--orange);
+        cursor: pointer;
+        place-items: center;
+        transform: translateY(-50%);
+      }
+
+      .mobile-menu-button span {
+        display: block;
+        width: 34px;
+        height: 3px;
+        border-radius: 999px;
+        background: currentColor;
+        box-shadow: 0 0 8px rgba(255, 157, 39, 0.28);
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .mobile-menu-button[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+      }
+
+      .mobile-nav {
+        position: absolute;
+        top: calc(100% - 9px);
+        right: 0;
+        z-index: 11;
+        width: min(230px, calc(100vw - 48px));
+        padding: 8px;
+        border: 1px solid var(--orange-line);
+        border-radius: 12px;
+        background: rgba(7, 7, 7, 0.98);
+        box-shadow: var(--shadow), 0 0 16px rgba(255, 145, 26, 0.24);
+      }
+
+      .mobile-nav.is-open {
+        display: grid;
+      }
+
+      .mobile-nav a {
+        padding: 11px 12px;
+        border-radius: 7px;
+        color: #f6f3ee;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .mobile-nav a:hover,
+      .mobile-nav a:focus-visible {
+        background: rgba(255, 157, 39, 0.1);
+        color: var(--orange);
+      }
+
+      .studio-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding-top: 0;
+      }
+
+      .player-column {
+        order: 1;
+        width: 100%;
+      }
+
+      .schedule-panel {
+        order: 2;
+      }
+
+      .chat-panel {
+        order: 3;
+      }
+
+      .panel {
+        border-radius: 16px;
+      }
+
+      .player-panel {
+        height: auto;
+      }
+
+      .schedule-panel {
+        height: 420px;
+      }
+
+      .chat-panel {
+        height: 560px;
+      }
+
+      .panel-header {
+        min-height: 58px;
+        padding: 12px 14px 10px;
+      }
+
+      .panel-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        color: #35d869;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+      }
+
+      .panel-status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px rgba(53, 216, 105, 0.72);
+      }
+
+      .schedule-header-link {
+        display: inline-flex;
+        margin-left: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--blue);
+        font-family: "Oswald", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .schedule-footer {
+        display: none;
+      }
+
+      .schedule-content,
+      .chat-shell {
+        margin-right: 8px;
+        margin-left: 8px;
+      }
+
+      .schedule-row {
+        min-height: 54px;
+        grid-template-columns: 76px minmax(0, 1fr);
+        padding: 7px 11px;
+      }
+
+      .chat-topbar {
+        min-height: 56px;
+      }
+
+      .chat-message {
+        grid-template-columns: 35px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 8px 2px;
+      }
+
+      .chat-avatar {
+        width: 35px;
+        height: 35px;
+      }
+
+      .panel-heading h2 {
+        font-size: 1rem;
+      }
+
+      .live-row {
+        min-height: 56px;
+      }
+
+      .live-badge {
+        min-height: 37px;
+        font-size: 1.05rem;
+      }
+
+      .live-wave {
+        width: 34px;
+      }
+
+      .station-copy h2 {
+        font-size: 1.2rem;
+      }
+
+      .now-playing {
+        display: grid;
+        grid-template-columns: minmax(118px, 42%) minmax(0, 1fr);
+        gap: 14px;
+        padding: 7px 28px 5px;
+      }
+
+      .artwork-frame {
+        width: 100%;
+      }
+
+      .track-copy {
+        text-align: left;
+      }
+
+      .track-title {
+        font-size: clamp(1.35rem, 7vw, 1.85rem);
+      }
+
+      .track-artist {
+        font-size: 0.92rem;
+      }
+
+      .track-note {
+        display: none;
+      }
+
+      .custom-player {
+        margin: 0 26px;
+        padding-top: 22px;
+      }
+
+      .transport-row {
+        min-height: 92px;
+      }
+
+      .play-button {
+        width: 84px;
+        height: 84px;
+      }
+
+      .player-state-icon {
+        width: 51px;
+        height: 51px;
+      }
+
+      .music-platforms {
+        gap: 6px;
+        margin: 12px 26px 18px;
+      }
+
+      .platform-link:not(.apple) {
+        padding: 3px 5px;
+      }
+
+      .site-footer {
+        display: flex;
+        min-height: 120px;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 14px;
+        gap: 18px;
+        padding: 20px 12px;
+      }
+
+      .contact-link {
+        justify-self: auto;
+        width: min(310px, 82%);
+      }
+
+      .footer-tagline {
+        font-size: 0.78rem;
+        line-height: 1.5;
+      }
+
+      .footer-tagline::before,
+      .footer-tagline::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .site-shell {
+        width: min(calc(100% - 24px), 740px);
+      }
+
+      .site-header {
+        padding-right: 48px;
+      }
+
+      .brand-name {
+        font-size: 1.82rem;
+      }
+
+      .brand-mark {
+        width: 43px;
+        height: 43px;
+      }
+
+      .now-playing {
+        grid-template-columns: 102px minmax(0, 1fr);
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .custom-player,
+      .music-platforms {
+        margin-right: 12px;
+        margin-left: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#studio">Skip to the station</a>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="brand-lockup">
+        <div class="brand" aria-label="WTinyRadio home">
+          <img class="brand-mark" src="./wtinyradio-badge.png" alt="">
+          <p class="brand-name">WTinyRadio</p>
+        </div>
+        <p class="brand-tagline">The best radio station you've never heard before</p>
+      </div>
+      <button id="menuToggle" class="mobile-menu-button" type="button" aria-label="Open site menu" aria-controls="mobileNav" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+      <nav id="mobileNav" class="mobile-nav" aria-label="Mobile site navigation">
+        <a href="#player">Live player</a>
+        <a href="#schedule">Weekly schedule</a>
+        <a href="#chat">Community chat</a>
+        <a href="#contact">Contact us</a>
+      </nav>
+    </header>
+
+    <main id="studio" class="studio-grid">
+      <section id="schedule" class="panel schedule-panel" aria-labelledby="schedule-title">
+        <header class="panel-header">
+          <span class="panel-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M6 2v3M18 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
+          </span>
+          <div class="panel-heading">
+            <h2 id="schedule-title">Weekly schedule</h2>
+          </div>
+          <button class="schedule-header-link schedule-toggle" type="button">View full schedule</button>
+        </header>
+
+        <div class="schedule-content">
+          <div id="scheduleDays" class="schedule-days" role="tablist" aria-label="Choose a schedule day"></div>
+          <div class="schedule-date-bar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2v3M18 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
+            <strong id="scheduleDateLabel">Loading this week…</strong>
+            <span id="scheduleTimezone" class="schedule-timezone"></span>
+          </div>
+          <div id="scheduleList" class="schedule-list" aria-live="polite">
+            <div class="panel-state">Loading the live schedule…</div>
+          </div>
+        </div>
+
+        <div class="schedule-footer">
+          <button class="schedule-link schedule-toggle" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span>View full schedule</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="player-column">
+        <section id="player" class="panel player-panel" aria-labelledby="trackTitle">
+          <div class="live-row" aria-label="WTinyRadio is live">
+            <span class="live-wave" aria-hidden="true"></span>
+            <span class="live-badge"><span class="live-dot" aria-hidden="true"></span>Live</span>
+            <span class="live-wave" aria-hidden="true"></span>
+          </div>
+
+          <div class="station-copy">
+            <h2>WTinyRadio</h2>
+            <p>The best radio station you've never heard before</p>
+          </div>
+
+          <div class="now-playing" aria-live="polite">
+            <div class="artwork-frame">
+              <img id="albumArtwork" class="artwork" src="./512x512.png" alt="WTinyRadio artwork">
+            </div>
+
+            <div class="track-copy">
+              <h1 id="trackTitle" class="track-title">WTinyRadio is live</h1>
+              <p id="trackArtist" class="track-artist">Press play to listen</p>
+              <p class="track-note"><strong>Currently playing</strong>Thanks for listening to WTinyRadio</p>
+            </div>
+          </div>
+
+          <div class="custom-player">
+            <audio id="radioAudio" preload="none" playsinline src="https://mixman.radiocult.fm/stream"></audio>
+
+            <div class="transport-row" aria-label="Live radio controls">
+              <button class="transport-button" type="button" disabled aria-label="Previous track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h2v14H5V5Zm14 0v14L9 12l10-7Z"/></svg>
+              </button>
+
+              <button id="playButton" class="play-button" type="button" aria-label="Play WTinyRadio live stream" aria-pressed="false">
+                <img class="player-state-icon play-icon" src="./player-play-blue.png" alt="" aria-hidden="true">
+                <img class="player-state-icon pause-icon" src="./player-pause-blue.png" alt="" aria-hidden="true">
+              </button>
+
+              <button class="transport-button" type="button" disabled aria-label="Next track is unavailable on live radio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5h2v14h-2V5ZM5 5l10 7-10 7V5Z"/></svg>
+              </button>
+            </div>
+
+            <p id="playerStatus" class="player-status" role="status">Press play to listen live</p>
+
+            <div class="volume-row">
+              <button id="muteButton" class="volume-button" type="button" aria-label="Mute WTinyRadio" aria-pressed="false">
+                <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Z"/></svg>
+                <svg class="muted-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.1.7 1.4-1.4 1.8 1.8 1.8-1.8 1.4 1.4-1.8 1.8 1.8 1.8-1.4 1.4-1.8-1.8-1.8 1.8-1.4-1.4 1.8-1.8-1.8-1.8Z"/></svg>
+              </button>
+              <input id="volumeControl" class="volume-control" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="WTinyRadio volume">
+              <span class="volume-high" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3Zm11.5-.7a5 5 0 0 1 0 7.4l1.4 1.4a7 7 0 0 0 0-10.2l-1.4 1.4Zm2.8-3a9 9 0 0 1 0 13.4l1.4 1.4a11 11 0 0 0 0-16.2l-1.4 1.4Z"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <nav class="music-platforms" aria-label="Find the current song on a music service">
+            <a id="appleMusicLink" class="platform-link apple" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Apple Music" aria-disabled="true">
+              <img src="./apple-music-listen-badge.svg" alt="Listen on Apple Music">
+            </a>
+            <a id="spotifyLink" class="platform-link spotify" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Spotify" aria-disabled="true">
+              <img src="./spotify-full-logo-green.svg" alt="Spotify">
+            </a>
+            <a id="youtubeMusicLink" class="platform-link youtube" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on YouTube Music" aria-disabled="true">
+              <img src="./youtube-music-logo.svg" alt="YouTube Music">
+            </a>
+          </nav>
+        </section>
+      </div>
+
+      <section id="chat" class="panel chat-panel" aria-labelledby="chat-title">
+        <header class="panel-header">
+          <span class="panel-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 18l-1 4 5-3h9a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v9a3 3 0 0 0 2 3ZM8 9h8M8 13h5"/></svg>
+          </span>
+          <div class="panel-heading">
+            <h2 id="chat-title">Community chat</h2>
+          </div>
+          <span class="panel-status">Live chat</span>
+        </header>
+
+        <div class="chat-shell">
+          <div class="chat-topbar">
+            <span class="chat-station-avatar" aria-hidden="true"><img src="./wtinyradio-badge.png" alt=""></span>
+            <div class="chat-station-copy">
+              <strong>Wtinyradio.com</strong>
+              <span id="chatAudience" class="chat-live-count">Connecting…</span>
+            </div>
+            <button id="chatNameButton" class="chat-name-button" type="button">Choose name</button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-label="WTinyRadio community messages">
+            <div class="panel-state">Loading the live conversation…</div>
+          </div>
+
+          <form id="chatForm" class="chat-composer">
+            <label class="sr-only" for="chatInput">Chat message</label>
+            <input id="chatInput" class="chat-input" name="message" maxlength="1000" autocomplete="off" placeholder="Choose a display name to join…">
+            <button id="chatSend" class="chat-send" type="submit">Send</button>
+          </form>
+
+          <p id="chatStatus" class="sr-only" role="status"></p>
+
+          <div id="chatNameDialog" class="chat-name-dialog" hidden>
+            <div class="chat-name-card" role="dialog" aria-modal="true" aria-labelledby="chatNameTitle">
+              <h3 id="chatNameTitle">Join the WTinyRadio chat</h3>
+              <p>Pick the display name other listeners will see. You can change it later.</p>
+              <form id="chatNameForm" class="chat-name-form">
+                <label class="sr-only" for="chatNameInput">Display name</label>
+                <input id="chatNameInput" class="chat-input" name="displayName" minlength="2" maxlength="28" autocomplete="nickname" placeholder="Display name" required>
+                <div class="chat-name-actions">
+                  <button id="chatNameCancel" type="button">Cancel</button>
+                  <button class="primary" type="submit">Join chat</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div class="footer-tagline">The best radio station you've never heard before</div>
+      <nav class="social-links" aria-label="WTinyRadio social links">
+        <a class="social-link" href="https://www.facebook.com/Wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1Z"/></svg>
+        </a>
+        <a class="social-link" href="https://x.com/wtinyradio" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on X">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6.1c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.3 1.7-2.2-.8.5-1.6.8-2.6 1A4 4 0 0 0 11 9.1a11.4 11.4 0 0 1-8.3-4.2A4 4 0 0 0 4 10.3c-.6 0-1.2-.2-1.8-.5 0 2 1.5 3.7 3.4 4.1-.4.1-.7.2-1.1.2-.3 0-.5 0-.8-.1.5 1.7 2.1 2.9 3.9 2.9A8.1 8.1 0 0 1 2.5 19H1.5a11.4 11.4 0 0 0 6.2 1.8c7.4 0 11.5-6.2 11.5-11.5v-.5c.8-.6 1.4-1.3 1.9-2.1Z"/></svg>
+        </a>
+        <a class="social-link" href="https://www.instagram.com/cugaz" target="_blank" rel="noopener noreferrer" aria-label="WTinyRadio on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        </a>
+        <a class="social-link" href="https://open.spotify.com/search/WTinyRadio" target="_blank" rel="noopener noreferrer" aria-label="Find WTinyRadio on Spotify">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.3-1 7.4-.7 10 .7M8.2 12.3c2.7-.8 6.2-.5 8.7.7M8.9 15.2c2.2-.6 4.9-.4 7 .6"/></svg>
+        </a>
+      </nav>
+      <a class="contact-link" href="mailto:support@wtinyradio.com">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>
+        <span>Contact us</span>
+      </a>
+    </footer>
+  </div>
+
+  <script>
+    const STATION_ID = "mixman";
+    const FALLBACK_ARTWORK = "./512x512.png";
+    const STREAM_URL = "https://mixman.radiocult.fm/stream";
+    const DATA_API_BASE = "https://radio-api.wtinyradio.com";
+    const liveEndpoint = `${DATA_API_BASE}/live`;
+    const CHAT_SOCKET_URL = `wss://api.radiocult.fm/socket.io/?stationId=${encodeURIComponent(STATION_ID)}&isEmbedded=true&EIO=4&transport=websocket`;
+
+    const titleElement = document.getElementById("trackTitle");
+    const artistElement = document.getElementById("trackArtist");
+    const artworkElement = document.getElementById("albumArtwork");
+    const radioAudio = document.getElementById("radioAudio");
+    const playButton = document.getElementById("playButton");
+    const playerStatus = document.getElementById("playerStatus");
+    const muteButton = document.getElementById("muteButton");
+    const volumeControl = document.getElementById("volumeControl");
+    const spotifyLink = document.getElementById("spotifyLink");
+    const appleMusicLink = document.getElementById("appleMusicLink");
+    const youtubeMusicLink = document.getElementById("youtubeMusicLink");
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileNav = document.getElementById("mobileNav");
+    const schedulePanel = document.getElementById("schedule");
+    const scheduleDays = document.getElementById("scheduleDays");
+    const scheduleDateLabel = document.getElementById("scheduleDateLabel");
+    const scheduleTimezone = document.getElementById("scheduleTimezone");
+    const scheduleList = document.getElementById("scheduleList");
+    const scheduleToggles = document.querySelectorAll(".schedule-toggle");
+    const chatMessagesElement = document.getElementById("chatMessages");
+    const chatAudience = document.getElementById("chatAudience");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatSend = document.getElementById("chatSend");
+    const chatStatus = document.getElementById("chatStatus");
+    const chatNameButton = document.getElementById("chatNameButton");
+    const chatNameDialog = document.getElementById("chatNameDialog");
+    const chatNameForm = document.getElementById("chatNameForm");
+    const chatNameInput = document.getElementById("chatNameInput");
+    const chatNameCancel = document.getElementById("chatNameCancel");
+
+    function firstValue(...values) {
+      return values.find((value) => typeof value === "string" && value.trim())?.trim() || "";
+    }
+
+    function artworkValue(value) {
+      if (typeof value === "string") return value.trim();
+      if (!value || typeof value !== "object") return "";
+
+      return firstValue(
+        value["512x512"],
+        value.default,
+        value.original,
+        value["256x256"],
+        value["128x128"]
+      );
+    }
+
+    function setArtwork(source, title, artist) {
+      const nextSource = source || FALLBACK_ARTWORK;
+      const nextAlt = source ? `Artwork for ${title} by ${artist}` : "WTinyRadio artwork";
+
+      artworkElement.alt = nextAlt;
+      if (artworkElement.dataset.source === nextSource) return;
+
+      artworkElement.dataset.source = nextSource;
+      artworkElement.classList.add("is-loading");
+      artworkElement.src = nextSource;
+    }
+
+    function setMusicDestination(link, url) {
+      link.href = url || "#";
+      link.setAttribute("aria-disabled", url ? "false" : "true");
+    }
+
+    function updatePlaybackState(isPlaying, statusText) {
+      playButton.classList.toggle("is-playing", isPlaying);
+      playButton.setAttribute("aria-pressed", String(isPlaying));
+      playButton.setAttribute("aria-label", isPlaying ? "Pause WTinyRadio live stream" : "Play WTinyRadio live stream");
+      if (statusText) playerStatus.textContent = statusText;
+    }
+
+    function updateVolumeDisplay() {
+      const volume = radioAudio.muted ? 0 : radioAudio.volume;
+      volumeControl.value = String(volume);
+      volumeControl.style.setProperty("--volume", `${Math.round(volume * 100)}%`);
+      muteButton.classList.toggle("is-muted", radioAudio.muted || radioAudio.volume === 0);
+      muteButton.setAttribute("aria-pressed", String(radioAudio.muted || radioAudio.volume === 0));
+      muteButton.setAttribute("aria-label", radioAudio.muted || radioAudio.volume === 0 ? "Unmute WTinyRadio" : "Mute WTinyRadio");
+    }
+
+    async function togglePlayback() {
+      if (!radioAudio.paused) {
+        radioAudio.pause();
+        updatePlaybackState(false, "Paused — press play to return live");
+        return;
+      }
+
+      playButton.disabled = true;
+      playerStatus.textContent = "Connecting to the live stream…";
+
+      try {
+        radioAudio.src = STREAM_URL;
+        radioAudio.load();
+        await radioAudio.play();
+      } catch (error) {
+        updatePlaybackState(false, "Stream temporarily unavailable");
+        console.info("Live audio could not start.", error);
+      } finally {
+        playButton.disabled = false;
+      }
+    }
+
+    function applyNowPlaying(result) {
+      const recognition = result?.musicRecognition;
+      const recognized = recognition?.status === "match" ? recognition.metadata : null;
+      const stationMetadata = result?.metadata || {};
+
+      const title = firstValue(recognized?.title, stationMetadata.title, "WTinyRadio is live");
+      const artist = firstValue(recognized?.artist, stationMetadata.artist, "Press play to listen");
+      const artwork = firstValue(
+        recognized?.artworkUrl,
+        artworkValue(recognized?.artwork),
+        artworkValue(recognized?.albumArtwork),
+        stationMetadata.artworkUrl,
+        artworkValue(stationMetadata.artwork),
+        artworkValue(stationMetadata.albumArtwork)
+      );
+
+      titleElement.textContent = title;
+      artistElement.textContent = artist;
+      setArtwork(artwork, title, artist);
+
+      const spotifyTrackId = firstValue(recognized?.spotifyTrackId);
+      const spotifyUrl = spotifyTrackId
+        ? `https://open.spotify.com/track/${encodeURIComponent(spotifyTrackId)}`
+        : title && artist
+          ? `https://open.spotify.com/search/${encodeURIComponent(`${artist} ${title}`)}`
+          : "";
+
+      const searchQuery = title && artist ? `${artist} ${title}` : "";
+      const appleMusicUrl = searchQuery
+        ? `https://music.apple.com/us/search?term=${encodeURIComponent(searchQuery)}`
+        : "";
+      const youtubeMusicUrl = searchQuery
+        ? `https://music.youtube.com/search?q=${encodeURIComponent(searchQuery)}`
+        : "";
+
+      setMusicDestination(spotifyLink, spotifyUrl);
+      setMusicDestination(appleMusicLink, appleMusicUrl);
+      setMusicDestination(youtubeMusicLink, youtubeMusicUrl);
+    }
+
+    async function updateNowPlaying() {
+      try {
+        const response = await fetch(liveEndpoint, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Station API returned ${response.status}`);
+        const data = await response.json();
+        if (data?.result) applyNowPlaying(data.result);
+      } catch (error) {
+        console.info("Live metadata is temporarily unavailable.", error);
+      }
+    }
+
+    artworkElement.addEventListener("load", () => {
+      artworkElement.classList.remove("is-loading");
+    });
+
+    artworkElement.addEventListener("error", () => {
+      artworkElement.classList.remove("is-loading");
+      if (artworkElement.dataset.source !== FALLBACK_ARTWORK) {
+        artworkElement.dataset.source = FALLBACK_ARTWORK;
+        artworkElement.src = FALLBACK_ARTWORK;
+        artworkElement.alt = "WTinyRadio artwork";
+      }
+    });
+
+    playButton.addEventListener("click", togglePlayback);
+
+    radioAudio.addEventListener("playing", () => updatePlaybackState(true, "Live stream playing"));
+    radioAudio.addEventListener("waiting", () => {
+      if (!radioAudio.paused) playerStatus.textContent = "Reconnecting to the live stream…";
+    });
+    radioAudio.addEventListener("pause", () => {
+      if (!playButton.disabled) updatePlaybackState(false, "Paused — press play to return live");
+    });
+    radioAudio.addEventListener("error", () => updatePlaybackState(false, "Stream temporarily unavailable"));
+
+    muteButton.addEventListener("click", () => {
+      radioAudio.muted = !radioAudio.muted;
+      updateVolumeDisplay();
+    });
+
+    volumeControl.addEventListener("input", () => {
+      radioAudio.volume = Number(volumeControl.value);
+      radioAudio.muted = radioAudio.volume === 0;
+      updateVolumeDisplay();
+    });
+
+    function closeMobileMenu() {
+      mobileNav.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open site menu");
+    }
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      mobileNav.classList.toggle("is-open", !isOpen);
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Open site menu" : "Close site menu");
+    });
+
+    mobileNav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) closeMobileMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMobileMenu();
+    });
+
+    const scheduleLocale = navigator.language || "en-US";
+    const stationTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Phoenix";
+    let weeklySchedule = [];
+    let scheduleWeekView = false;
+
+    function getScheduleWeekStart(date = new Date()) {
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+      const daysSinceMonday = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - daysSinceMonday);
+      return start;
+    }
+
+    const scheduleWeekStart = getScheduleWeekStart();
+    let selectedScheduleDay = Math.max(0, Math.min(6, (new Date().getDay() + 6) % 7));
+
+    function scheduleDay(index) {
+      const date = new Date(scheduleWeekStart);
+      date.setDate(date.getDate() + index);
+      return date;
+    }
+
+    function formatScheduleTime(date) {
       return new Intl.DateTimeFormat(scheduleLocale, {
         hour: "2-digit",
         minute: "2-digit"
