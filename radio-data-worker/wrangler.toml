@@ -1,0 +1,8 @@
+name = "wtinyradio-data"
+main = "src/index.js"
+compatibility_date = "2026-07-13"
+workers_dev = true
+
+routes = [
+  { pattern = "radio-api.wtinyradio.com", custom_domain = true }
+]
