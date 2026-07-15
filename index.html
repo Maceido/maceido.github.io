@@ -1923,14 +1923,12 @@
     </footer>
   </div>
 
-  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script>
   <script>
     const STATION_ID = "mixman";
     const FALLBACK_ARTWORK = "./512x512.png";
     const STREAM_URL = "https://mixman.radiocult.fm/stream";
     const DATA_API_BASE = "https://radio-api.wtinyradio.com";
     const liveEndpoint = `${DATA_API_BASE}/live`;
-    const CHAT_SOCKET_ORIGIN = "https://api.radiocult.fm";
 
     const titleElement = document.getElementById("trackTitle");
     const artistElement = document.getElementById("trackArtist");
@@ -2347,8 +2345,6 @@
     });
 
     const chatMessageStore = new Map();
-    let chatSocket;
-    let chatSocketReady = false;
     let chatHasRendered = false;
     let chatUser = null;
 
@@ -2358,9 +2354,15 @@
       localStorage.removeItem("wtinyradio-chat-user");
     }
 
+    function hasChatIdentity() {
+      return Boolean(chatUser?.userId && chatUser?.token);
+    }
+
     function updateChatIdentity() {
       chatNameButton.textContent = chatUser?.displayName || "Choose name";
-      chatInput.placeholder = chatUser ? `Message as ${chatUser.displayName}…` : "Choose a display name to join…";
+      chatInput.placeholder = hasChatIdentity()
+        ? `Message as ${chatUser.displayName}…`
+        : "Choose a display name to join…";
     }
 
     function chatCreatedDate(message) {
@@ -2501,7 +2503,9 @@
         const data = await response.json();
         mergeChatMessages(data.messages || []);
         if (!chatHasRendered) renderChatMessages();
+        chatAudience.textContent = "Live chat";
       } catch (error) {
+        chatAudience.textContent = "Reconnecting…";
         if (!chatHasRendered) {
           chatMessagesElement.replaceChildren();
           const state = document.createElement("div");
@@ -2511,89 +2515,6 @@
         }
         console.info("Chat history could not be loaded.", error);
       }
-    }
-
-    function updateChatParticipants(payload) {
-      const participants = payload?.participants;
-      const count = Array.isArray(participants) ? participants.length : Number(participants) || 0;
-      chatAudience.textContent = count ? `${count} online` : "Live chat";
-    }
-
-    function connectChatSocket() {
-      if (chatSocket?.connected || chatSocket?.active) return;
-      chatSocketReady = false;
-      chatAudience.textContent = "Connecting…";
-
-      if (typeof window.io !== "function") {
-        chatAudience.textContent = "Chat unavailable";
-        console.info("The live chat client could not be loaded.");
-        return;
-      }
-
-      chatSocket = window.io(CHAT_SOCKET_ORIGIN, {
-        path: "/socket.io/",
-        transports: ["websocket"],
-        query: {
-          stationId: STATION_ID,
-          isEmbedded: "true"
-        },
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        timeout: 10000
-      });
-
-      chatSocket.on("connect", () => {
-        chatSocketReady = true;
-        chatAudience.textContent = "Live chat";
-      });
-      chatSocket.on("message", (payload) => mergeChatMessages(payload?.messages || payload));
-      chatSocket.on("messages", (payload) => mergeChatMessages(payload?.messages || payload));
-      chatSocket.on("participants-list-update", updateChatParticipants);
-      chatSocket.on("disconnect", () => {
-        chatSocketReady = false;
-        chatAudience.textContent = "Reconnecting…";
-      });
-      chatSocket.on("connect_error", (error) => {
-        chatSocketReady = false;
-        chatAudience.textContent = "Reconnecting…";
-        console.info("The live chat connection is retrying.", error?.message || error);
-      });
-    }
-
-    function waitForChatSocket(timeout = 4500) {
-      if (chatSocketReady) return Promise.resolve(true);
-      connectChatSocket();
-      return new Promise((resolve) => {
-        const started = Date.now();
-        const interval = window.setInterval(() => {
-          if (chatSocketReady || Date.now() - started >= timeout) {
-            window.clearInterval(interval);
-            resolve(chatSocketReady);
-          }
-        }, 100);
-      });
-    }
-
-    function createChatMessage(type, content, user = chatUser) {
-      return {
-        station: STATION_ID,
-        id: typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-        displayName: user.displayName,
-        userId: user.userId,
-        createdAt: Math.floor(Date.now() / 1000),
-        timestampId: "",
-        flagged: false,
-        type,
-        content
-      };
-    }
-
-    function sendChatSocketMessage(message) {
-      if (!chatSocketReady || !chatSocket?.connected) return false;
-      chatSocket.emit("message", message);
-      mergeChatMessages(message);
-      return true;
     }
 
     function openChatNameDialog() {
@@ -2606,15 +2527,51 @@
       chatNameDialog.hidden = true;
     }
 
-    function createChatUserId() {
-      if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
-      return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+    async function registerChatIdentity(displayName, allowRetry = true) {
+      const payload = { displayName };
+      if (hasChatIdentity()) {
+        payload.userId = chatUser.userId;
+        payload.token = chatUser.token;
+      }
+
+      const response = await fetch(`${DATA_API_BASE}/chat/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (response.status === 401 && allowRetry) {
+        chatUser = null;
+        localStorage.removeItem("wtinyradio-chat-user");
+        return registerChatIdentity(displayName, false);
+      }
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || `Chat name returned ${response.status}`);
+      return data;
+    }
+
+    async function postChatMessage(text) {
+      const response = await fetch(`${DATA_API_BASE}/chat/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: chatUser.userId,
+          token: chatUser.token,
+          text
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(data.error || `Chat message returned ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+      return data.message;
     }
 
     chatNameButton.addEventListener("click", openChatNameDialog);
     chatNameCancel.addEventListener("click", closeChatNameDialog);
     chatInput.addEventListener("focus", () => {
-      if (!chatUser) openChatNameDialog();
+      if (!hasChatIdentity()) openChatNameDialog();
     });
 
     chatNameForm.addEventListener("submit", async (event) => {
@@ -2622,31 +2579,22 @@
       const displayName = chatNameInput.value.trim();
       if (displayName.length < 2) return;
 
-      const previousUser = chatUser;
       const submitButton = chatNameForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
       chatStatus.textContent = "Joining chat…";
 
       try {
-        chatUser = {
-          userId: previousUser?.userId || createChatUserId(),
-          displayName
-        };
+        const data = await registerChatIdentity(displayName);
+        chatUser = data.user;
         localStorage.setItem("wtinyradio-chat-user", JSON.stringify(chatUser));
+        mergeChatMessages(data.message);
         updateChatIdentity();
         closeChatNameDialog();
         chatInput.focus();
         chatStatus.textContent = `Chatting as ${chatUser.displayName}`;
-
-        if (await waitForChatSocket()) {
-          const text = previousUser
-            ? `${previousUser.displayName} changed their name to ${chatUser.displayName}`
-            : `${chatUser.displayName} joined the chat`;
-          sendChatSocketMessage(createChatMessage(previousUser ? "user_name_change" : "user_joined", { text }));
-        }
       } catch (error) {
-        chatStatus.textContent = "Your chat name could not be saved. Please try again.";
-        console.info("Chat identity could not be stored.", error);
+        chatStatus.textContent = error.message || "Your chat name could not be saved. Please try again.";
+        console.info("Chat identity could not be saved.", error);
       } finally {
         submitButton.disabled = false;
       }
@@ -2654,7 +2602,7 @@
 
     chatForm.addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (!chatUser) {
+      if (!hasChatIdentity()) {
         openChatNameDialog();
         return;
       }
@@ -2662,28 +2610,31 @@
       const text = chatInput.value.trim();
       if (!text) return;
       chatSend.disabled = true;
-      const connected = await waitForChatSocket();
-      if (!connected) {
-        chatStatus.textContent = "The chat is reconnecting. Please try sending again.";
-        chatSend.disabled = false;
-        return;
-      }
-
-      const message = createChatMessage("message", { text });
-      if (sendChatSocketMessage(message)) {
+      try {
+        const message = await postChatMessage(text);
+        mergeChatMessages(message);
         chatInput.value = "";
         chatStatus.textContent = "Message sent";
+      } catch (error) {
+        if (error.status === 401) {
+          chatUser = null;
+          localStorage.removeItem("wtinyradio-chat-user");
+          updateChatIdentity();
+          openChatNameDialog();
+        }
+        chatStatus.textContent = error.message || "Your message could not be sent. Please try again.";
+        console.info("Chat message could not be sent.", error);
+      } finally {
+        chatSend.disabled = false;
+        chatInput.focus();
       }
-      chatSend.disabled = false;
-      chatInput.focus();
     });
 
     updateChatIdentity();
     renderScheduleTabs();
     loadWeeklySchedule();
     loadChatHistory();
-    connectChatSocket();
-    window.setInterval(loadChatHistory, 15000);
+    window.setInterval(loadChatHistory, 4000);
 
     radioAudio.volume = 0.8;
     updateVolumeDisplay();
