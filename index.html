@@ -7,21 +7,26 @@
   <meta name="description" content="Listen live to WTinyRadio, check the weekly schedule, and hang out with the community.">
   <meta property="og:title" content="WTinyRadio — Live underground radio">
   <meta property="og:description" content="The best radio station you've never heard before.">
-  <meta property="og:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png">
-  <meta property="og:image:width" content="1728">
+  <meta property="og:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png?v=20260716">
+  <meta property="og:image:secure_url" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png?v=20260716">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1731">
   <meta property="og:image:height" content="909">
   <meta property="og:image:alt" content="WTinyRadio — The best radio station you've never heard before">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.wtinyradio.com/">
+  <meta property="og:site_name" content="WTinyRadio">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="WTinyRadio — Live underground radio">
   <meta name="twitter:description" content="The best radio station you've never heard before.">
-  <meta name="twitter:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png">
+  <meta name="twitter:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png?v=20260716">
+  <meta name="twitter:image:alt" content="WTinyRadio — The best radio station you've never heard before">
   <title>WTinyRadio — Live underground radio</title>
 
-  <link rel="icon" href="./favicon.ico" sizes="any">
-  <link rel="icon" href="./favicon-32x32.png" type="image/png">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="icon" href="./wtinyradio-badge.png" type="image/png" sizes="256x256">
+  <link rel="shortcut icon" href="./wtinyradio-badge.png" type="image/png">
+  <link rel="apple-touch-icon" href="./wtinyradio-badge.png">
+  <link rel="image_src" href="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png?v=20260716">
   <link rel="manifest" href="./site.webmanifest">
   <link rel="preconnect" href="https://app.radiocult.fm">
   <link rel="preconnect" href="https://api.radiocult.fm">
@@ -711,6 +716,30 @@
     .chat-send:disabled {
       cursor: wait;
       opacity: 0.55;
+    }
+
+    .chat-latest-button {
+      position: absolute;
+      right: 16px;
+      bottom: 66px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border: 1px solid rgba(87, 157, 255, 0.72);
+      border-radius: 999px;
+      background: rgba(9, 19, 38, 0.95);
+      color: #dceaff;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 14px rgba(46, 116, 255, 0.28);
+      font-family: "Oswald", sans-serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+
+    .chat-latest-button[hidden] {
+      display: none;
     }
 
     .chat-name-dialog[hidden] {
@@ -1841,6 +1870,12 @@
         padding-top: 18px;
       }
 
+      body[data-mobile-view="chat"] .chat-panel {
+        height: calc(100dvh - 174px);
+        max-height: calc(100dvh - 174px);
+        overflow: hidden;
+      }
+
       body[data-mobile-view="schedule"] .schedule-content,
       body[data-mobile-view="chat"] .chat-shell {
         flex: 1;
@@ -1862,14 +1897,19 @@
 
       body[data-mobile-view="chat"] .chat-shell {
         display: flex;
+        height: 100%;
         min-height: 0;
         flex-direction: column;
         margin-bottom: 18px;
+        overflow: hidden;
       }
 
       body[data-mobile-view="chat"] .chat-messages {
         max-height: none;
+        min-height: 0;
         flex: 1;
+        overflow-y: auto;
+        overscroll-behavior: contain;
       }
 
       .track-copy {
@@ -1937,6 +1977,7 @@
       }
 
       .music-platforms {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 7px;
         margin: 2px 16px 22px;
         padding-top: 15px;
@@ -1944,15 +1985,32 @@
       }
 
       .platform-link {
-        min-height: 48px;
+        width: 100%;
+        height: 52px;
+        min-height: 52px;
+        padding: 6px;
         aspect-ratio: auto;
         border-radius: 12px;
         background: rgba(12, 12, 13, 0.92);
       }
 
       .platform-link.apple {
-        min-height: 48px;
-        padding: 0;
+        height: 52px;
+        min-height: 52px;
+        padding: 6px;
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(12, 12, 13, 0.92);
+      }
+
+      .platform-link img,
+      .platform-link.apple img,
+      .platform-link.spotify img,
+      .platform-link.youtube img {
+        width: auto;
+        max-width: 92%;
+        height: 31px;
+        max-height: 31px;
+        object-fit: contain;
       }
 
       .schedule-panel,
@@ -2083,6 +2141,11 @@
       .chat-messages {
         max-height: 320px;
         min-height: 240px;
+      }
+
+      .chat-input,
+      .chat-name-form .chat-input {
+        font-size: 16px;
       }
 
       .mobile-chat-preview {
@@ -2402,6 +2465,11 @@
             <div class="panel-state">Loading the live conversation…</div>
           </div>
 
+          <button id="chatLatestButton" class="chat-latest-button" type="button" hidden>
+            <span aria-hidden="true">↓</span>
+            <span>Back to latest</span>
+          </button>
+
           <form id="chatForm" class="chat-composer">
             <label class="sr-only" for="chatInput">Chat message</label>
             <input id="chatInput" class="chat-input" name="message" maxlength="1000" autocomplete="off" placeholder="Choose a display name to join…">
@@ -2503,6 +2571,7 @@
     const chatNameForm = document.getElementById("chatNameForm");
     const chatNameInput = document.getElementById("chatNameInput");
     const chatNameCancel = document.getElementById("chatNameCancel");
+    const chatLatestButton = document.getElementById("chatLatestButton");
     const mobileDockButtons = document.querySelectorAll(".mobile-dock [data-mobile-view]");
     const mobileChatPreviewMessages = document.getElementById("mobileChatPreviewMessages");
     const mobileChatOpenButtons = document.querySelectorAll("[data-mobile-open-chat]");
@@ -2520,6 +2589,7 @@
 
       if (window.matchMedia("(max-width: 760px)").matches) {
         window.scrollTo({ top: 0, behavior: "smooth" });
+        if (nextView === "chat") window.setTimeout(() => scrollChatToBottom("auto"), 50);
         if (shouldFocus) {
           const target = nextView === "schedule" ? schedulePanel : nextView === "chat" ? document.getElementById("chat") : document.getElementById("player");
           window.setTimeout(() => target?.focus({ preventScroll: true }), 250);
@@ -2997,8 +3067,25 @@
       messageRows.forEach((row) => mobileChatPreviewMessages.append(row.cloneNode(true)));
     }
 
+    function chatIsNearBottom() {
+      return chatMessagesElement.scrollHeight - chatMessagesElement.scrollTop - chatMessagesElement.clientHeight < 90;
+    }
+
+    function updateChatLatestButton() {
+      chatLatestButton.hidden = chatIsNearBottom();
+    }
+
+    function scrollChatToBottom(behavior = "smooth") {
+      chatMessagesElement.scrollTo({ top: chatMessagesElement.scrollHeight, behavior });
+      window.setTimeout(updateChatLatestButton, behavior === "smooth" ? 260 : 0);
+    }
+
+    chatMessagesElement.addEventListener("scroll", updateChatLatestButton, { passive: true });
+    chatLatestButton.addEventListener("click", () => scrollChatToBottom());
+
     function renderChatMessages() {
-      const wasNearBottom = chatMessagesElement.scrollHeight - chatMessagesElement.scrollTop - chatMessagesElement.clientHeight < 90;
+      const wasNearBottom = chatIsNearBottom();
+      const previousBottomOffset = chatMessagesElement.scrollHeight - chatMessagesElement.scrollTop;
       const messages = Array.from(chatMessageStore.values())
         .filter((message) => !message.flagged)
         .sort((first, second) => chatCreatedDate(first) - chatCreatedDate(second))
@@ -3079,9 +3166,14 @@
         chatMessagesElement.append(row);
       });
 
-      if (!chatHasRendered || wasNearBottom) chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+      if (!chatHasRendered || wasNearBottom) {
+        chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+      } else {
+        chatMessagesElement.scrollTop = Math.max(0, chatMessagesElement.scrollHeight - previousBottomOffset);
+      }
       chatHasRendered = true;
       updateMobileChatPreview();
+      window.requestAnimationFrame(updateChatLatestButton);
     }
 
     function mergeChatMessages(messages) {
