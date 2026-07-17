@@ -807,6 +807,150 @@
       background: #2456b0;
     }
 
+    .contact-panel {
+      display: none;
+    }
+
+    body.support-open {
+      overflow: hidden;
+    }
+
+    body.support-open .contact-panel {
+      position: fixed;
+      inset: 5vh 20px;
+      z-index: 80;
+      display: flex;
+      width: min(680px, calc(100% - 40px));
+      height: min(760px, 90vh);
+      margin: auto;
+      box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.78), var(--shadow), 0 0 22px rgba(255, 145, 26, 0.3);
+    }
+
+    .support-close {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      margin-left: auto;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+      place-items: center;
+    }
+
+    .support-shell {
+      min-height: 0;
+      flex: 1;
+      padding: 6px 24px 24px;
+      overflow-y: auto;
+    }
+
+    .support-intro {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .support-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .support-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .support-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .support-field label {
+      color: #dcd7d0;
+      font-family: "Oswald", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .support-field input,
+    .support-field select,
+    .support-field textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 11px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9px;
+      outline: 0;
+      background: #151719;
+      color: #f5f2ed;
+      font: inherit;
+    }
+
+    .support-field textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .support-field input:focus,
+    .support-field select:focus,
+    .support-field textarea:focus {
+      border-color: rgba(87, 157, 255, 0.78);
+      box-shadow: 0 0 0 3px rgba(87, 157, 255, 0.12);
+    }
+
+    .support-honeypot {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .support-submit {
+      min-height: 48px;
+      grid-column: 1 / -1;
+      padding: 11px 18px;
+      border: 1px solid var(--orange-line);
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(151, 61, 8, 0.94), rgba(71, 23, 3, 0.96));
+      color: #fff3e4;
+      font-family: "Oswald", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .support-submit:disabled {
+      cursor: wait;
+      opacity: 0.62;
+    }
+
+    .support-result {
+      min-height: 24px;
+      grid-column: 1 / -1;
+      margin: 0;
+      color: #b9d5ff;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .support-result.is-success {
+      padding: 12px 14px;
+      border: 1px solid rgba(53, 216, 105, 0.42);
+      border-radius: 9px;
+      background: rgba(22, 91, 44, 0.16);
+      color: #b9f3ca;
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -1865,7 +2009,10 @@
       body[data-mobile-view="schedule"] .player-column,
       body[data-mobile-view="schedule"] .chat-panel,
       body[data-mobile-view="chat"] .player-column,
-      body[data-mobile-view="chat"] .schedule-panel {
+      body[data-mobile-view="chat"] .schedule-panel,
+      body[data-mobile-view="contact"] .player-column,
+      body[data-mobile-view="contact"] .schedule-panel,
+      body[data-mobile-view="contact"] .chat-panel {
         display: none;
       }
 
@@ -1881,6 +2028,46 @@
         height: calc(100dvh - 174px);
         max-height: calc(100dvh - 174px);
         overflow: hidden;
+      }
+
+      body[data-mobile-view="contact"] .contact-panel {
+        position: static;
+        display: flex;
+        width: 100%;
+        height: auto;
+        min-height: calc(100dvh - 174px);
+        max-height: none;
+        margin: 0;
+        overflow: hidden;
+        border: 0;
+        border-radius: 0;
+        background: rgba(7, 7, 7, 0.94);
+        box-shadow: none;
+      }
+
+      body[data-mobile-view="contact"].support-open {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .support-shell {
+        padding: 6px 18px 30px;
+      }
+
+      .support-form {
+        grid-template-columns: 1fr;
+      }
+
+      .support-field.full,
+      .support-submit,
+      .support-result {
+        grid-column: 1;
+      }
+
+      .support-field input,
+      .support-field select,
+      .support-field textarea {
+        font-size: 16px;
       }
 
       body[data-mobile-view="schedule"] .schedule-content,
@@ -2371,7 +2558,7 @@
         <a href="#player">Live player</a>
         <a href="#schedule">Weekly schedule</a>
         <a href="#chat">Community chat</a>
-        <a class="mobile-nav-contact" href="mailto:support@wtinyradio.com">Contact us</a>
+        <a class="mobile-nav-contact" href="#support" data-open-support>Contact us</a>
       </nav>
     </header>
 
@@ -2487,7 +2674,7 @@
           </div>
         </aside>
 
-        <a class="mobile-contact-link" href="mailto:support@wtinyradio.com">
+        <a class="mobile-contact-link" href="#support" data-open-support>
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
           <span>Contact us</span>
         </a>
@@ -2547,6 +2734,64 @@
           </div>
         </div>
       </section>
+
+      <section id="support" class="panel contact-panel" aria-labelledby="support-title" tabindex="-1">
+        <header class="panel-header">
+          <span class="panel-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>
+          </span>
+          <div class="panel-heading">
+            <h2 id="support-title">Contact support</h2>
+          </div>
+          <button id="supportClose" class="support-close" type="button" aria-label="Close support form">×</button>
+        </header>
+
+        <div class="support-shell">
+          <p class="support-intro">Tell us what happened and WTinyRadio will create a support ticket. Keep the ticket number shown after you submit.</p>
+
+          <form id="supportForm" class="support-form">
+            <div class="support-field">
+              <label for="supportName">Your name</label>
+              <input id="supportName" name="name" type="text" minlength="2" maxlength="80" autocomplete="name" required>
+            </div>
+
+            <div class="support-field">
+              <label for="supportEmail">Email address</label>
+              <input id="supportEmail" name="email" type="email" maxlength="254" autocomplete="email" required>
+            </div>
+
+            <div class="support-field full">
+              <label for="supportCategory">What do you need help with?</label>
+              <select id="supportCategory" name="category" required>
+                <option value="">Choose a category</option>
+                <option value="technical">Website or player problem</option>
+                <option value="chat">Community chat</option>
+                <option value="schedule">Schedule or show information</option>
+                <option value="music">Music or song question</option>
+                <option value="general">Something else</option>
+              </select>
+            </div>
+
+            <div class="support-field full">
+              <label for="supportSubject">Subject</label>
+              <input id="supportSubject" name="subject" type="text" minlength="4" maxlength="120" required>
+            </div>
+
+            <div class="support-field full">
+              <label for="supportMessage">How can we help?</label>
+              <textarea id="supportMessage" name="message" minlength="10" maxlength="3000" required></textarea>
+            </div>
+
+            <div class="support-honeypot" aria-hidden="true">
+              <label for="supportCompany">Company</label>
+              <input id="supportCompany" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button id="supportSubmit" class="support-submit" type="submit">Submit support ticket</button>
+            <p id="supportResult" class="support-result" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
     </main>
 
     <nav class="mobile-dock" aria-label="Mobile screen navigation" role="tablist">
@@ -2580,7 +2825,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.3-1 7.4-.7 10 .7M8.2 12.3c2.7-.8 6.2-.5 8.7.7M8.9 15.2c2.2-.6 4.9-.4 7 .6"/></svg>
         </a>
       </nav>
-      <a class="contact-link" href="mailto:support@wtinyradio.com">
+      <a class="contact-link" href="#support" data-open-support>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>
         <span>Contact us</span>
       </a>
@@ -2628,10 +2873,18 @@
     const mobileDockButtons = document.querySelectorAll(".mobile-dock [data-mobile-view]");
     const mobileChatPreviewMessages = document.getElementById("mobileChatPreviewMessages");
     const mobileChatOpenButtons = document.querySelectorAll("[data-mobile-open-chat]");
+    const supportPanel = document.getElementById("support");
+    const supportOpenButtons = document.querySelectorAll("[data-open-support]");
+    const supportClose = document.getElementById("supportClose");
+    const supportForm = document.getElementById("supportForm");
+    const supportSubmit = document.getElementById("supportSubmit");
+    const supportResult = document.getElementById("supportResult");
+    let supportStartedAt = Date.now();
 
     function setMobileView(view, shouldFocus = false) {
-      const allowedViews = new Set(["live", "schedule", "chat"]);
+      const allowedViews = new Set(["live", "schedule", "chat", "contact"]);
       const nextView = allowedViews.has(view) ? view : "live";
+      if (nextView !== "contact") document.body.classList.remove("support-open");
       document.body.dataset.mobileView = nextView;
 
       mobileDockButtons.forEach((button) => {
@@ -2644,7 +2897,13 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
         if (nextView === "chat") window.setTimeout(() => scrollChatToBottom("auto"), 50);
         if (shouldFocus) {
-          const target = nextView === "schedule" ? schedulePanel : nextView === "chat" ? document.getElementById("chat") : document.getElementById("player");
+          const target = nextView === "schedule"
+            ? schedulePanel
+            : nextView === "chat"
+              ? document.getElementById("chat")
+              : nextView === "contact"
+                ? supportPanel
+                : document.getElementById("player");
           window.setTimeout(() => target?.focus({ preventScroll: true }), 250);
         }
       }
@@ -2656,6 +2915,58 @@
 
     mobileChatOpenButtons.forEach((button) => {
       button.addEventListener("click", () => setMobileView("chat"));
+    });
+
+    function openSupportScreen(event) {
+      event?.preventDefault();
+      supportStartedAt = Date.now();
+      supportResult.textContent = "";
+      supportResult.classList.remove("is-success");
+      document.body.classList.add("support-open");
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        setMobileView("contact", true);
+      } else {
+        window.setTimeout(() => supportPanel.focus(), 0);
+      }
+    }
+
+    function closeSupportScreen() {
+      document.body.classList.remove("support-open");
+      if (window.matchMedia("(max-width: 760px)").matches) setMobileView("live");
+    }
+
+    supportOpenButtons.forEach((button) => button.addEventListener("click", openSupportScreen));
+    supportClose.addEventListener("click", closeSupportScreen);
+
+    supportForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supportForm.reportValidity()) return;
+
+      const formData = new FormData(supportForm);
+      const payload = Object.fromEntries(formData.entries());
+      payload.startedAt = supportStartedAt;
+      supportSubmit.disabled = true;
+      supportResult.classList.remove("is-success");
+      supportResult.textContent = "Submitting your ticket…";
+
+      try {
+        const response = await fetch(`${DATA_API_BASE}/support/ticket`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || `Support service returned ${response.status}`);
+
+        supportForm.reset();
+        supportStartedAt = Date.now();
+        supportResult.classList.add("is-success");
+        supportResult.textContent = `Your ticket ${data.ticketNumber} was submitted. WTinyRadio will reply to the email address you provided.`;
+      } catch (error) {
+        supportResult.textContent = error.message || "Your ticket could not be submitted. Please try again.";
+      } finally {
+        supportSubmit.disabled = false;
+      }
     });
 
     function firstValue(...values) {
@@ -2840,7 +3151,10 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeMobileMenu();
+      if (event.key === "Escape") {
+        closeMobileMenu();
+        if (document.body.classList.contains("support-open")) closeSupportScreen();
+      }
     });
 
     const scheduleLocale = navigator.language || "en-US";

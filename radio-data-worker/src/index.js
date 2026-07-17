@@ -50,7 +50,7 @@ async function tokenHash(token) {
 }
 
 async function schema(env) {
-  if (!env.DB) throw new Error("The chat database is not bound");
+  if (!env.DB) throw new Error("The WTinyRadio database is not bound");
   await env.DB.batch([
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS chat_users (
       id TEXT PRIMARY KEY,
@@ -66,7 +66,20 @@ async function schema(env) {
       text TEXT NOT NULL,
       created_at INTEGER NOT NULL
     )`),
-    env.DB.prepare("CREATE INDEX IF NOT EXISTS chat_messages_created_idx ON chat_messages(created_at)")
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS chat_messages_created_idx ON chat_messages(created_at)"),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS support_tickets (
+      id TEXT PRIMARY KEY,
+      ticket_number TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      category TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      message TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'open',
+      created_at INTEGER NOT NULL
+    )`),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS support_tickets_email_created_idx ON support_tickets(email, created_at)"),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS support_tickets_status_created_idx ON support_tickets(status, created_at)")
   ]);
 }
 
@@ -179,6 +192,60 @@ async function saveMessage(request, env) {
   }) }, 201);
 }
 
+function cleanTicketText(value) {
+  return typeof value === "string" ? value.trim().replace(/\r\n?/g, "\n") : "";
+}
+
+async function saveSupportTicket(request, env) {
+  await schema(env);
+  const body = await request.json().catch(() => null);
+  const name = displayName(body?.name);
+  const email = cleanTicketText(body?.email).toLowerCase();
+  const category = cleanTicketText(body?.category).toLowerCase();
+  const subject = cleanTicketText(body?.subject).replace(/\s+/g, " ");
+  const message = cleanTicketText(body?.message);
+  const company = cleanTicketText(body?.company);
+  const startedAt = Number(body?.startedAt || 0);
+  const allowedCategories = new Set(["technical", "chat", "schedule", "music", "general"]);
+
+  if (company) return json(request, { success: true, ticketNumber: "WT-RECEIVED" }, 201);
+  if (!Number.isFinite(startedAt) || startedAt <= 0 || Date.now() - startedAt < 1500 || Date.now() - startedAt > 86400000) {
+    return json(request, { success: false, error: "Please reopen the support form and try again" }, 400);
+  }
+  if (name.length < 2 || name.length > 80) {
+    return json(request, { success: false, error: "Your name must be between 2 and 80 characters" }, 400);
+  }
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json(request, { success: false, error: "Enter a valid email address" }, 400);
+  }
+  if (!allowedCategories.has(category)) {
+    return json(request, { success: false, error: "Choose a support category" }, 400);
+  }
+  if (subject.length < 4 || subject.length > 120) {
+    return json(request, { success: false, error: "The subject must be between 4 and 120 characters" }, 400);
+  }
+  if (message.length < 10 || message.length > 3000) {
+    return json(request, { success: false, error: "The message must be between 10 and 3000 characters" }, 400);
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  const recent = await env.DB.prepare(`SELECT created_at FROM support_tickets
+    WHERE email = ? ORDER BY created_at DESC LIMIT 1`).bind(email).first();
+  if (recent && now - recent.created_at < 60) {
+    return json(request, { success: false, error: "Please wait one minute before submitting another ticket" }, 429);
+  }
+
+  const id = crypto.randomUUID();
+  const randomCode = crypto.randomUUID().replaceAll("-", "").slice(0, 5).toUpperCase();
+  const ticketNumber = `WT-${now.toString(36).toUpperCase()}-${randomCode}`;
+  await env.DB.prepare(`INSERT INTO support_tickets
+    (id, ticket_number, name, email, category, subject, message, status, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 'open', ?)`)
+    .bind(id, ticketNumber, name, email, category, subject, message, now).run();
+
+  return json(request, { success: true, ticketNumber }, 201);
+}
+
 async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, "") || "/";
@@ -214,6 +281,7 @@ async function handle(request, env) {
   if (path === "/chat" && request.method === "GET") return chatHistory(request, env);
   if (path === "/chat/user" && request.method === "POST") return saveIdentity(request, env);
   if (path === "/chat/message" && request.method === "POST") return saveMessage(request, env);
+  if (path === "/support/ticket" && request.method === "POST") return saveSupportTicket(request, env);
   return json(request, { success: false, error: "Not found" }, 404);
 }
 
