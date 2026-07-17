@@ -1217,14 +1217,42 @@
     }
 
     .platform-link.apple {
-      padding: 0;
-      border-color: transparent;
-      background: transparent;
+      padding: 4px 8px;
+      border-color: rgba(255, 255, 255, 0.18);
+      background: #090a0b;
     }
 
     .platform-link.apple img {
       width: 100%;
       height: 100%;
+    }
+
+    .apple-music-brand {
+      display: inline-flex;
+      min-width: 0;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .apple-music-mark {
+      display: grid;
+      width: 27px;
+      height: 27px;
+      flex: 0 0 27px;
+      border-radius: 7px;
+      background: linear-gradient(145deg, #fb5c74, #fa233b);
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      place-items: center;
     }
 
     .platform-link.spotify img {
@@ -1241,9 +1269,8 @@
     }
 
     .platform-link.apple:hover {
-      border-color: transparent;
-      background: transparent;
-      filter: brightness(1.08);
+      border-color: rgba(255, 199, 124, 0.72);
+      background: #121416;
     }
 
     .platform-link[aria-disabled="true"] {
@@ -2003,7 +2030,6 @@
       }
 
       .platform-link img,
-      .platform-link.apple img,
       .platform-link.spotify img,
       .platform-link.youtube img {
         width: auto;
@@ -2011,6 +2037,21 @@
         height: 31px;
         max-height: 31px;
         object-fit: contain;
+      }
+
+      .apple-music-brand {
+        width: auto;
+        max-width: 92%;
+        height: 31px;
+        gap: clamp(4px, 1.5vw, 7px);
+        font-size: clamp(0.61rem, 3.1vw, 0.82rem);
+      }
+
+      .apple-music-mark {
+        width: clamp(23px, 7vw, 27px);
+        height: clamp(23px, 7vw, 27px);
+        flex-basis: clamp(23px, 7vw, 27px);
+        font-size: 0.9rem;
       }
 
       .schedule-panel,
@@ -2418,7 +2459,10 @@
 
           <nav class="music-platforms" aria-label="Find the current song on a music service">
             <a id="appleMusicLink" class="platform-link apple" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Apple Music" aria-disabled="true">
-              <img src="./apple-music-listen-badge.svg" alt="Listen on Apple Music">
+              <span class="apple-music-brand" aria-hidden="true">
+                <span class="apple-music-mark">♪</span>
+                <span>Apple Music</span>
+              </span>
             </a>
             <a id="spotifyLink" class="platform-link spotify" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Spotify" aria-disabled="true">
               <img src="./spotify-full-logo-green.svg" alt="Spotify">
