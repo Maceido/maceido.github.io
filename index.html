@@ -1199,7 +1199,7 @@
       aspect-ratio: 140.62 / 41;
       align-items: center;
       justify-content: center;
-      padding: 4px 8px;
+      padding: 0;
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 8px;
       background: #090a0b;
@@ -1222,22 +1222,16 @@
       background: transparent;
     }
 
-    .platform-link.spotify,
-    .platform-link.youtube {
-      padding: 0;
-    }
-
     .platform-link.apple img {
-      width: 89%;
-      height: auto;
+      width: 100%;
+      height: 100%;
     }
 
-    .platform-link.spotify img {
-      width: 95%;
-    }
-
+    .platform-link.spotify img,
     .platform-link.youtube img {
-      width: 77%;
+      width: auto;
+      max-width: 88%;
+      height: 58%;
     }
 
     .platform-link:hover {
@@ -1983,25 +1977,25 @@
 
       .music-platforms {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 7px;
-        margin: 2px 16px 22px;
+        gap: clamp(6px, 2vw, 10px);
+        margin: 2px 12px 22px;
         padding-top: 15px;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
 
       .platform-link {
         width: 100%;
-        height: 52px;
-        min-height: 52px;
-        padding: 6px;
-        aspect-ratio: auto;
-        border-radius: 12px;
+        height: auto;
+        min-height: 0;
+        padding: 0;
+        aspect-ratio: 140.62 / 41;
+        border-radius: clamp(7px, 2vw, 10px);
         background: rgba(12, 12, 13, 0.92);
       }
 
       .platform-link.apple {
-        height: 52px;
-        min-height: 52px;
+        height: auto;
+        min-height: 0;
         padding: 0;
         border-color: transparent;
         background: transparent;
@@ -2011,26 +2005,22 @@
       .platform-link.apple img,
       .platform-link.spotify img,
       .platform-link.youtube img {
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        max-height: 41px;
         object-fit: contain;
       }
 
       .platform-link.apple img {
-        width: 89%;
-        height: auto;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: none;
       }
 
-      .platform-link.spotify img {
-        width: 95%;
-        height: auto;
-      }
-
+      .platform-link.spotify img,
       .platform-link.youtube img {
-        width: 77%;
-        height: auto;
+        width: auto;
+        max-width: 88%;
+        height: 58%;
+        max-height: none;
       }
 
       .schedule-panel,
