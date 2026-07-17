@@ -7,9 +7,16 @@
   <meta name="description" content="Listen live to WTinyRadio, check the weekly schedule, and hang out with the community.">
   <meta property="og:title" content="WTinyRadio — Live underground radio">
   <meta property="og:description" content="The best radio station you've never heard before.">
-  <meta property="og:image" content="https://www.wtinyradio.com/link.png">
+  <meta property="og:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png">
+  <meta property="og:image:width" content="1728">
+  <meta property="og:image:height" content="909">
+  <meta property="og:image:alt" content="WTinyRadio — The best radio station you've never heard before">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.wtinyradio.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WTinyRadio — Live underground radio">
+  <meta name="twitter:description" content="The best radio station you've never heard before.">
+  <meta name="twitter:image" content="https://www.wtinyradio.com/assets/wtinyradio-social-preview.png">
   <title>WTinyRadio — Live underground radio</title>
 
   <link rel="icon" href="./favicon.ico" sizes="any">
@@ -1708,6 +1715,386 @@
       }
     }
 
+    /* Immersive mobile radio experience */
+    @media (max-width: 760px) {
+      body {
+        padding-bottom: 92px;
+        background:
+          linear-gradient(180deg, rgba(2, 2, 2, 0.12), rgba(2, 2, 2, 0.82) 52%, #050505 100%),
+          url("./background-optimized.jpg") 50% top / auto 100vh repeat-y,
+          #050505;
+      }
+
+      .site-shell {
+        width: 100%;
+      }
+
+      .site-header {
+        min-height: 82px;
+        justify-content: flex-start;
+        padding: 8px 70px 8px 18px;
+        border-bottom: 0;
+        background: linear-gradient(180deg, rgba(4, 4, 4, 0.98), rgba(4, 4, 4, 0.74));
+      }
+
+      .brand-lockup,
+      .brand {
+        justify-content: flex-start;
+      }
+
+      .brand-mark {
+        width: 52px;
+        height: 52px;
+      }
+
+      .brand-name {
+        font-size: clamp(1.75rem, 9vw, 2.35rem);
+      }
+
+      .mobile-menu-button {
+        right: 16px;
+      }
+
+      .studio-grid {
+        gap: 28px;
+      }
+
+      .panel::after {
+        display: none;
+      }
+
+      .player-panel {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        background: #060606;
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.62);
+      }
+
+      .player-panel .live-row {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 4;
+        min-height: 0;
+        gap: 8px;
+        padding: 0;
+      }
+
+      .player-panel .live-wave {
+        display: none;
+      }
+
+      .player-panel .live-badge {
+        min-height: 38px;
+        padding: 7px 13px;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(13, 10, 9, 0.78);
+        box-shadow: 0 0 0 1px rgba(255, 98, 17, 0.35), 0 8px 25px rgba(0, 0, 0, 0.44);
+        backdrop-filter: blur(12px);
+        font-size: 1rem;
+      }
+
+      .now-playing {
+        position: relative;
+        display: block;
+        padding: 0;
+      }
+
+      .now-playing::after {
+        content: "";
+        position: absolute;
+        inset: 30% 0 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(180deg, transparent, rgba(4, 4, 4, 0.24) 32%, #060606 100%);
+      }
+
+      .artwork-frame {
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        aspect-ratio: 1 / 1.02;
+        box-shadow: none;
+      }
+
+      .track-copy {
+        position: absolute;
+        right: 22px;
+        bottom: 38px;
+        left: 22px;
+        z-index: 2;
+        width: auto;
+        text-align: left;
+        text-shadow: 0 3px 18px rgba(0, 0, 0, 0.92);
+      }
+
+      .track-title {
+        max-width: 90%;
+        font-size: clamp(2rem, 10vw, 3rem);
+        font-weight: 600;
+        line-height: 0.98;
+      }
+
+      .track-artist {
+        margin-top: 9px;
+        font-size: clamp(1rem, 5vw, 1.3rem);
+      }
+
+      .custom-player {
+        position: relative;
+        z-index: 3;
+        margin: -20px 20px 0;
+        padding: 0;
+      }
+
+      .transport-row {
+        min-height: 118px;
+      }
+
+      .transport-button {
+        width: 54px;
+        height: 54px;
+        border: 1px solid rgba(87, 157, 255, 0.58);
+        border-radius: 50%;
+        background: rgba(8, 15, 27, 0.82);
+        color: #fff;
+        box-shadow: 0 0 16px rgba(46, 116, 255, 0.18);
+      }
+
+      .transport-button svg {
+        width: 25px;
+        height: 25px;
+      }
+
+      .play-button {
+        width: 104px;
+        height: 104px;
+        border-width: 2px;
+      }
+
+      .player-state-icon {
+        width: 62px;
+        height: 62px;
+      }
+
+      .volume-row {
+        display: none;
+      }
+
+      .music-platforms {
+        gap: 7px;
+        margin: 2px 16px 22px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .platform-link {
+        min-height: 48px;
+        aspect-ratio: auto;
+        border-radius: 12px;
+        background: rgba(12, 12, 13, 0.92);
+      }
+
+      .platform-link.apple {
+        min-height: 48px;
+        padding: 0;
+      }
+
+      .schedule-panel,
+      .chat-panel {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .schedule-panel .panel-header,
+      .chat-panel .panel-header {
+        min-height: 52px;
+        padding: 0 18px 10px;
+      }
+
+      .schedule-panel .panel-heading h2,
+      .chat-panel .panel-heading h2 {
+        font-size: 1.2rem;
+        letter-spacing: 0.07em;
+      }
+
+      .schedule-content {
+        margin: 0;
+        overflow: visible;
+      }
+
+      .schedule-days {
+        margin: 0 18px 12px;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        background: rgba(8, 8, 8, 0.88);
+        scrollbar-width: none;
+      }
+
+      .schedule-days::-webkit-scrollbar {
+        display: none;
+      }
+
+      .schedule-day-tab {
+        min-width: 54px;
+        border-right: 0;
+        border-radius: 999px;
+      }
+
+      .schedule-date-bar {
+        margin: 0 18px 10px;
+        border: 0;
+        background: transparent;
+      }
+
+      .schedule-timezone {
+        display: none;
+      }
+
+      .schedule-list {
+        display: flex;
+        gap: 12px;
+        min-height: 148px;
+        padding: 2px 18px 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+      }
+
+      .schedule-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .schedule-group-label {
+        display: none;
+      }
+
+      .schedule-row {
+        position: relative;
+        display: flex;
+        min-width: 224px;
+        min-height: 138px;
+        flex: 0 0 224px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+        gap: 5px;
+        padding: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        background:
+          linear-gradient(145deg, rgba(255, 98, 17, 0.14), transparent 48%),
+          linear-gradient(160deg, #171717, #080808);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+        scroll-snap-align: start;
+      }
+
+      .schedule-row::before {
+        content: attr(data-day-label);
+        position: absolute;
+        top: 14px;
+        left: 18px;
+        color: #d9d2ca;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .schedule-time {
+        color: var(--orange);
+        font-size: 0.83rem;
+      }
+
+      .schedule-show strong {
+        font-size: 1.02rem;
+      }
+
+      .chat-shell {
+        margin: 0 16px;
+        border-radius: 18px;
+        background: rgba(10, 11, 12, 0.94);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      .chat-messages {
+        max-height: 320px;
+        min-height: 240px;
+      }
+
+      .site-footer {
+        margin-top: 34px;
+        padding-bottom: 38px;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+      }
+
+      .mobile-dock {
+        position: fixed;
+        right: 16px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        left: 16px;
+        z-index: 40;
+        display: grid;
+        max-width: 520px;
+        min-height: 66px;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 0 auto;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        background: rgba(7, 8, 10, 0.88);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.72), 0 0 22px rgba(40, 96, 195, 0.2);
+        backdrop-filter: blur(18px);
+      }
+
+      .mobile-dock a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f5f5f5;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.95rem;
+        text-decoration: none;
+      }
+
+      .mobile-dock a:last-child {
+        border-right: 0;
+      }
+
+      .mobile-dock a:first-child {
+        color: var(--blue-bright);
+        box-shadow: inset 0 -2px 0 var(--blue);
+      }
+
+      .mobile-dock svg {
+        width: 21px;
+        height: 21px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+      }
+    }
+
+    @media (min-width: 761px) {
+      .mobile-dock {
+        display: none;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -1899,6 +2286,21 @@
         </div>
       </section>
     </main>
+
+    <nav class="mobile-dock" aria-label="Mobile quick navigation">
+      <a href="#player" aria-label="Live player">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.5a5 5 0 0 0 0 7M5.5 5.5a9 9 0 0 0 0 13M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><circle cx="12" cy="12" r="2"/></svg>
+        <span>Live</span>
+      </a>
+      <a href="#schedule" aria-label="Schedule">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+        <span>Schedule</span>
+      </a>
+      <a href="#chat" aria-label="Community chat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H9l-6 3 1.5-5A7 7 0 0 1 3 12a7 7 0 0 1 7-7h7a4 4 0 0 1 4 4v6Z"/></svg>
+        <span>Chat</span>
+      </a>
+    </nav>
 
     <footer id="contact" class="site-footer">
       <div class="footer-tagline">The best radio station you've never heard before</div>
@@ -2197,6 +2599,11 @@
     function makeScheduleRow(event, date) {
       const row = document.createElement("article");
       row.className = "schedule-row";
+      row.dataset.dayLabel = new Intl.DateTimeFormat(scheduleLocale, {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      }).format(date);
 
       const dayStart = new Date(date);
       dayStart.setHours(0, 0, 0, 0);
