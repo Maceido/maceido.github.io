@@ -1217,50 +1217,27 @@
     }
 
     .platform-link.apple {
-      padding: 4px 8px;
-      border-color: rgba(255, 255, 255, 0.18);
-      background: #090a0b;
+      padding: 0;
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .platform-link.spotify,
+    .platform-link.youtube {
+      padding: 0;
     }
 
     .platform-link.apple img {
-      width: 100%;
-      height: 100%;
-    }
-
-    .apple-music-brand {
-      display: inline-flex;
-      min-width: 0;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      color: #fff;
-      font-size: 0.82rem;
-      font-weight: 600;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    .apple-music-mark {
-      display: grid;
-      width: 27px;
-      height: 27px;
-      flex: 0 0 27px;
-      border-radius: 7px;
-      background: linear-gradient(145deg, #fb5c74, #fa233b);
-      color: #fff;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-      font-family: Arial, sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      place-items: center;
+      width: 89%;
+      height: auto;
     }
 
     .platform-link.spotify img {
-      width: 78%;
+      width: 95%;
     }
 
     .platform-link.youtube img {
-      width: 76%;
+      width: 77%;
     }
 
     .platform-link:hover {
@@ -1269,8 +1246,9 @@
     }
 
     .platform-link.apple:hover {
-      border-color: rgba(255, 199, 124, 0.72);
-      background: #121416;
+      border-color: transparent;
+      background: transparent;
+      filter: brightness(1.08);
     }
 
     .platform-link[aria-disabled="true"] {
@@ -2024,34 +2002,35 @@
       .platform-link.apple {
         height: 52px;
         min-height: 52px;
-        padding: 6px;
-        border-color: rgba(255, 255, 255, 0.18);
-        background: rgba(12, 12, 13, 0.92);
+        padding: 0;
+        border-color: transparent;
+        background: transparent;
       }
 
       .platform-link img,
+      .platform-link.apple img,
       .platform-link.spotify img,
       .platform-link.youtube img {
         width: auto;
-        max-width: 92%;
-        height: 31px;
-        max-height: 31px;
+        max-width: 100%;
+        height: auto;
+        max-height: 41px;
         object-fit: contain;
       }
 
-      .apple-music-brand {
-        width: auto;
-        max-width: 92%;
-        height: 31px;
-        gap: clamp(4px, 1.5vw, 7px);
-        font-size: clamp(0.61rem, 3.1vw, 0.82rem);
+      .platform-link.apple img {
+        width: 89%;
+        height: auto;
       }
 
-      .apple-music-mark {
-        width: clamp(23px, 7vw, 27px);
-        height: clamp(23px, 7vw, 27px);
-        flex-basis: clamp(23px, 7vw, 27px);
-        font-size: 0.9rem;
+      .platform-link.spotify img {
+        width: 95%;
+        height: auto;
+      }
+
+      .platform-link.youtube img {
+        width: 77%;
+        height: auto;
       }
 
       .schedule-panel,
@@ -2459,10 +2438,7 @@
 
           <nav class="music-platforms" aria-label="Find the current song on a music service">
             <a id="appleMusicLink" class="platform-link apple" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Apple Music" aria-disabled="true">
-              <span class="apple-music-brand" aria-hidden="true">
-                <span class="apple-music-mark">♪</span>
-                <span>Apple Music</span>
-              </span>
+              <img src="./apple-music-listen-badge.svg" alt="Listen on Apple Music">
             </a>
             <a id="spotifyLink" class="platform-link spotify" href="#" target="_blank" rel="noopener noreferrer" aria-label="Listen on Spotify" aria-disabled="true">
               <img src="./spotify-full-logo-green.svg" alt="Spotify">
