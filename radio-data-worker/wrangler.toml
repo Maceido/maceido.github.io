@@ -11,3 +11,4 @@ routes = [
 binding = "DB"
 database_name = "wtinyradio-chat"
 database_id = "77c7c75b-3edf-40eb-a3c7-6a76be17fbd9"
+
