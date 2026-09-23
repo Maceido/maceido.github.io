@@ -1,5 +1,6 @@
 const STATION_ID = "mixman";
 const RADIOCULT_API = "https://api.radiocult.fm";
+const ICECAST_STREAM = "http://wtinyradio.ddns.net:8000/wtiny.mp3";
 const ORIGINS = new Set([
   "https://wtinyradio.com",
   "https://www.wtinyradio.com"
@@ -34,6 +35,32 @@ async function proxy(request, url, cacheControl = "no-store") {
   headers.set("Content-Type", response.headers.get("Content-Type") || "application/json; charset=utf-8");
   headers.set("Cache-Control", cacheControl);
   return new Response(await response.text(), { status: response.status, headers });
+}
+
+async function streamAudio(request) {
+  const requestHeaders = new Headers();
+  for (const name of ["Icy-MetaData", "Range", "User-Agent"]) {
+    const value = request.headers.get(name);
+    if (value) requestHeaders.set(name, value);
+  }
+
+  const response = await fetch(ICECAST_STREAM, {
+    method: "GET",
+    headers: requestHeaders,
+    redirect: "follow"
+  });
+  const headers = new Headers(response.headers);
+  const origin = request.headers.get("Origin") || "";
+  if (allowedOrigin(origin)) headers.set("Access-Control-Allow-Origin", origin);
+  headers.set("Cache-Control", "no-store");
+  headers.set("Vary", "Origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
 }
 
 function validTimestamp(value) {
@@ -263,6 +290,9 @@ async function handle(request, env) {
 
   if (path === "/live" && request.method === "GET") {
     return proxy(request, `${RADIOCULT_API}/api/station/${STATION_ID}/schedule/live`);
+  }
+  if (path === "/stream" && request.method === "GET") {
+    return streamAudio(request);
   }
   if (path === "/schedule" && request.method === "GET") {
     const start = url.searchParams.get("start");
